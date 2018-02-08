@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity
      * Google Map elements
      */
     private MapFragment mapFragment;
-    private GoogleMap mMap;
-    private UiSettings mUiSettings;
+    private GoogleMap   mMap;
+    private UiSettings  mUiSettings;
 
 
     @Override
@@ -234,7 +234,6 @@ public class MainActivity extends AppCompatActivity
                 super.onLocationResult(locationResult);
 
                 mCurrentLocation = locationResult.getLastLocation();
-                //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
                 updateLocationUI();
             }
         };
@@ -349,7 +348,6 @@ public class MainActivity extends AppCompatActivity
      * Updates all UI fields.
      */
     private void updateUI() {
-        //setButtonsEnabledState();
         updateLocationUI();
     }
 
@@ -605,17 +603,4 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onMarkerClickListener: " + marker.getPosition() );
         return false;
     }
-
-   /* @Override
-    public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false;
-    }*/
 }
