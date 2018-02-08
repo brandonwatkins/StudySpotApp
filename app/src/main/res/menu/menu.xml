@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- TODO Figure out how to have divider between "send hours" and the rest of the menu -->
+    <item
+        android:id="@+id/action_send_hours"
+        android:orderInCategory="100"
+        android:title="@string/menu_send_hours"
+        app:showAsAction="never">
+
+        <!-- "file" submenu -->
+        <menu>
+            <item android:id="@+id/coach_finora"
+                android:title="@string/menu_coach_finora" />
+            <item android:id="@+id/coach_white"
+                android:title="@string/menu_coach_white" />
+            <item android:id="@+id/coach_biggerstaff"
+                android:title="@string/menu_coach_biggerstaff" />
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/action_my_recorded_hours"
+        android:orderInCategory="100"
+        android:title="@string/menu_my_recorded_hours"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_show_studySpot"
+        android:orderInCategory="100"
+        android:title="@string/menu_show_studySpot"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/menu_settings"
+        app:showAsAction="never" />
+
+</menu>
