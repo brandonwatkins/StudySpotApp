@@ -114,14 +114,6 @@ public class MainActivity extends AppCompatActivity
      */
     private Location mCurrentLocation;
 
-    // UI Widgets.
-    private TextView mLatitudeTextView;
-    private TextView mLongitudeTextView;
-
-    // Labels.
-    private String mLatitudeLabel;
-    private String mLongitudeLabel;
-
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
      * Start Updates and Stop Updates buttons.
@@ -129,6 +121,9 @@ public class MainActivity extends AppCompatActivity
     private Boolean mRequestingLocationUpdates;
 
 
+    /**
+     * Google Map elements
+     */
     private MapFragment mapFragment;
     private GoogleMap mMap;
     private UiSettings mUiSettings;
@@ -139,14 +134,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        // Create the Floating Action Button that is a quick way to send recorded hours
+        // to the default coach
+        createFAB();
 
         mRequestingLocationUpdates = true;
 
@@ -166,6 +156,18 @@ public class MainActivity extends AppCompatActivity
         initializeGoogleMap();
 
     }
+
+    private void createFAB(){
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
 
     /**
      * Updates fields based on data stored in the bundle.
@@ -372,10 +374,10 @@ public class MainActivity extends AppCompatActivity
      */
     private void updateLocationUI() {
         if (mCurrentLocation != null) {
-            mLatitudeTextView.setText(String.format(Locale.ENGLISH, "%s: %f", mLatitudeLabel,
+            /*mLatitudeTextView.setText(String.format(Locale.ENGLISH, "%s: %f", mLatitudeLabel,
                     mCurrentLocation.getLatitude()));
             mLongitudeTextView.setText(String.format(Locale.ENGLISH, "%s: %f", mLongitudeLabel,
-                    mCurrentLocation.getLongitude()));
+                    mCurrentLocation.getLongitude()));*/
         }
     }
 
