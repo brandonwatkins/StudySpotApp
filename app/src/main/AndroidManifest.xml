@@ -19,12 +19,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCqRrtS3IUpb7pxBNycZlLnYmpUpkNytOw"/>
 
-        <activity android:name=".MainActivity">
+        <!-- This is the first activity that is launched. The splash screen is displayed -->
+        <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".MainActivity">
+
         </activity>
     </application>
 
