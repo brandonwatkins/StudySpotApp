@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    // Background colour of the splash screen
+    // Background image of the splash screen
     <item>
         <bitmap android:src="@drawable/splash_screen_background"/>
     </item>
 
     // App logo displayed in the center of the screen
-    <!-- TODO make the logo smaller in the center -->
     <item>
         <bitmap android:src="@drawable/logo_with_name"
             android:gravity="center" />
