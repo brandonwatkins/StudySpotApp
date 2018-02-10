@@ -20,8 +20,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,6 +130,9 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap   mMap;
     private UiSettings  mUiSettings;
 
+    private Button btnMyHours;
+    private Button btnViewStudySpot;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -155,7 +160,47 @@ public class MainActivity extends AppCompatActivity
         // Initialize GoogleMaps
         initializeGoogleMap();
 
+        // UI elements
+        btnMyHours = (Button) findViewById(R.id.btn_my_hours);
+        btnViewStudySpot = (Button) findViewById(R.id.btn_view_studyspot);
+
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    // TODO start the activity or method that each item does
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.coach_finora:
+                //startActivity(new Intent(this, About.class));
+                return true;
+            case R.id.coach_white:
+                //startActivity(new Intent(this, Help.class));
+                return true;
+            case R.id.coach_biggerstaff:
+                //startActivity(new Intent(this, Help.class));
+                return true;
+            case R.id.action_my_recorded_hours:
+                startActivity(new Intent(this, MyRecordedHoursActivity.class));
+                return true;
+            case R.id.action_show_studySpot:
+                //startActivity(new Intent(this, Help.class));
+                return true;
+            case R.id.action_settings:
+                //startActivity(new Intent(this, Help.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 
     private void createFAB(){
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -603,4 +648,16 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onMarkerClickListener: " + marker.getPosition() );
         return false;
     }
+          
+    /** Called when the user taps the My Hours button */
+    public void startRecordedHours(View view) {
+        Intent intent = new Intent(this, MyRecordedHoursActivity.class);
+        startActivity(intent);
+    }
+
+    /** Called when the user taps the Show StudySpot button */
+    public void showStudySpot(View view) {
+       // TODO Add functionality to button
+    }
+
 }
