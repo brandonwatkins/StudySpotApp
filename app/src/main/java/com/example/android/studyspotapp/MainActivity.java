@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,6 +130,9 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap mMap;
     private UiSettings mUiSettings;
 
+    private Button btnMyHours;
+    private Button btnViewStudySpot;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,6 +160,10 @@ public class MainActivity extends AppCompatActivity
         // Initialize GoogleMaps
         initializeGoogleMap();
 
+        // UI elements
+        btnMyHours = (Button) findViewById(R.id.btn_my_hours);
+        btnViewStudySpot = (Button) findViewById(R.id.btn_view_studyspot);
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -178,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                 //startActivity(new Intent(this, Help.class));
                 return true;
             case R.id.action_my_recorded_hours:
-                //startActivity(new Intent(this, Help.class));
+                startActivity(new Intent(this, MyRecordedHoursActivity.class));
                 return true;
             case R.id.action_show_studySpot:
                 //startActivity(new Intent(this, Help.class));
@@ -655,4 +663,16 @@ public class MainActivity extends AppCompatActivity
         // (the camera animates to the user's current position).
         return false;
     }*/
+
+    /** Called when the user taps the My Hours button */
+    public void startRecordedHours(View view) {
+        Intent intent = new Intent(this, MyRecordedHoursActivity.class);
+        startActivity(intent);
+    }
+
+    /** Called when the user taps the Show StudySpot button */
+    public void showStudySpot(View view) {
+       // TODO Add functionality to button
+    }
+
 }

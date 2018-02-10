@@ -110,6 +110,7 @@
                 android:paddingStart="8dp"
                 android:text="@string/btn_my_hours"
                 android:textColor="@color/colorAccent"
+                android:onClick="startRecordedHours"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/media_image" />
@@ -125,6 +126,7 @@
                 android:paddingStart="8dp"
                 android:text="@string/btn_view_studyspot"
                 android:textColor="@color/colorAccent"
+                android:onClick="showStudySpot"
                 app:layout_constraintStart_toEndOf="@+id/btn_my_hours"
                 app:layout_constraintTop_toTopOf="@+id/btn_my_hours" />
 
