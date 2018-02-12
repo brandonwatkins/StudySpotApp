@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.nfc.Tag;
@@ -47,6 +48,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -137,8 +140,9 @@ public class MainActivity extends AppCompatActivity
     private MapFragment mapFragment;
     private GoogleMap mMap;
     private UiSettings mUiSettings;
+    private Circle geoFenceLimits;
 
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    private LatLng renfroLibrary = new LatLng(35.827454, -82.551807);
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
@@ -187,6 +191,7 @@ public class MainActivity extends AppCompatActivity
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
 
+
         // Kick off the process of building the LocationCallback, LocationRequest, and
         // LocationSettingsRequest objects.
         createLocationCallback();
@@ -196,10 +201,6 @@ public class MainActivity extends AppCompatActivity
         // Initialize GoogleMaps
         initializeGoogleMap();
 
-
-        /**
-         * Geofence tasks
-         */
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<>();
 
@@ -210,6 +211,9 @@ public class MainActivity extends AppCompatActivity
         populateGeofenceList();
 
         mGeofencingClient = LocationServices.getGeofencingClient(this);
+
+        // Add the geofences
+        addGeofences();
 
     }
 
@@ -503,6 +507,12 @@ public class MainActivity extends AppCompatActivity
             // setButtonsEnabledState();
             startLocationUpdates();
         }
+
+        if (!checkPermissions()) {
+            requestPermissions();
+        } else {
+            performPendingGeofenceTask();
+        }
     }
 
     @Override
@@ -551,14 +561,14 @@ public class MainActivity extends AppCompatActivity
      * @param actionStringId   The text of the action item.
      * @param listener         The listener associated with the Snackbar action.
      */
-    private void showSnackbar(final int mainTextStringId, final int actionStringId,
+    /*private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(
                 findViewById(android.R.id.content),
                 getString(mainTextStringId),
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(actionStringId), listener).show();
-    }
+    }*/
 
     /**
      * Return the current state of the permissions needed.
@@ -618,6 +628,7 @@ public class MainActivity extends AppCompatActivity
                     startLocationUpdates();
 
                 }
+                performPendingGeofenceTask();
             } else {
                 // Permission denied.
 
@@ -645,6 +656,7 @@ public class MainActivity extends AppCompatActivity
                                 startActivity(intent);
                             }
                         });
+                mPendingGeofenceTask = PendingGeofenceTask.NONE;
             }
         }
     }
@@ -698,18 +710,21 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-   /* @Override
-    public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+    // Draw Geofence circle on GoogleMap
+    private void drawGeofence() {
+        Log.d(TAG, "drawGeofence()");
+
+        if ( geoFenceLimits != null )
+            geoFenceLimits.remove();
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center(renfroLibrary)
+                .strokeColor(Color.argb(50, 70,70,70))
+                .fillColor( Color.argb(100, 150,150,150) )
+                .radius(Constants.GEOFENCE_RADIUS_IN_METERS);
+        geoFenceLimits = mMap.addCircle(circleOptions);
     }
 
-    @Override
-    public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false;
-    }*/
 
     /**
      * Geofence Tasks
@@ -760,6 +775,8 @@ public class MainActivity extends AppCompatActivity
 
         mGeofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
                 .addOnCompleteListener(this);
+
+        //drawGeofence();
     }
 
     /**
@@ -799,7 +816,8 @@ public class MainActivity extends AppCompatActivity
         mPendingGeofenceTask = PendingGeofenceTask.NONE;
         if (task.isSuccessful()) {
             updateGeofencesAdded(!getGeofencesAdded());
-            setButtonsEnabledState();
+            //setButtonsEnabledState();
+            drawGeofence();
 
             int messageId = getGeofencesAdded() ? R.string.geofences_added :
                     R.string.geofences_removed;
@@ -918,8 +936,8 @@ public class MainActivity extends AppCompatActivity
     private void performPendingGeofenceTask() {
         if (mPendingGeofenceTask == PendingGeofenceTask.ADD) {
             addGeofences();
-        } else if (mPendingGeofenceTask == PendingGeofenceTask.REMOVE) {
+        } /*else if (mPendingGeofenceTask == PendingGeofenceTask.REMOVE) {
             removeGeofences();
-        }
+        }*/
     }
 }
