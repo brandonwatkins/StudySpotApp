@@ -708,6 +708,7 @@ public class MainActivity extends AppCompatActivity
     public void startRecordedHours(View view) {
         Intent intent = new Intent(this, MyRecordedHoursActivity.class);
         startActivity(intent);
+    }
 
     // Draw Geofence circle on GoogleMap
     private void drawGeofence() {
