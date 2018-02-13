@@ -29,6 +29,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -80,7 +81,6 @@ public class GeofenceTransitionsJobIntentService extends JobIntentService {
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
-            Log.d(TAG, "REGISTERED A TRANSITION!!!");
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
@@ -89,7 +89,8 @@ public class GeofenceTransitionsJobIntentService extends JobIntentService {
                     triggeringGeofences);
 
             // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails);
+            //sendNotification(geofenceTransitionDetails);
+            Log.d(TAG, "REGISTERED A TRANSITION!!!");
             Log.i(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
