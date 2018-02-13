@@ -47,7 +47,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/cv_current_session"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="#DE000000"
@@ -58,14 +58,12 @@
                 android:id="@+id/tv_current_session_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
+                android:textColor="@color/colorAccent"
                 android:text="00:27"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                app:layout_constraintEnd_toStartOf="@+id/media_image"
-                app:layout_constraintStart_toEndOf="@+id/tv_current_session_lbl"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_current_session_lbl"
+                app:layout_constraintStart_toEndOf="@+id/tv_current_session_lbl" />
 
             <TextView
                 android:id="@+id/tv_weekly_total_time"
@@ -81,39 +79,28 @@
                 android:id="@+id/tv_weekly_total_lbl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:text="@string/cv_weekly_totals"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="#8A000000"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_current_session_lbl"
                 app:layout_constraintTop_toBottomOf="@+id/tv_current_session_lbl" />
-
-            <ImageView
-                android:id="@+id/media_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="visible"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_my_hours"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:minWidth="0dp"
+                android:onClick="startRecordedHours"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
                 android:text="@string/btn_my_hours"
                 android:textColor="@color/colorAccent"
-                android:onClick="startRecordedHours"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/media_image" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_weekly_total_lbl" />
 
             <Button
                 android:id="@+id/btn_view_studyspot"
