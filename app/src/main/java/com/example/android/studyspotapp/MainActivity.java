@@ -10,7 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
-import android.nfc.Tag;
+import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -20,15 +20,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -50,9 +47,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,7 +58,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
@@ -137,11 +133,14 @@ public class MainActivity extends AppCompatActivity
     private Location mLastKnownLocation;
 
 
-
-    private CameraPosition mCameraPosition;
     /**
-     * Tracks the status of the location updates request. Value changes when the user presses the
-     * Start Updates and Stop Updates buttons.
+     * Represents a the cameras location on the map fragment.
+     */
+    private CameraPosition mCameraPosition;
+
+    /**
+     * Tracks the status of the location updates request. Was used for debugging.
+     * Can be removed later on
      */
     private Boolean mRequestingLocationUpdates;
 
@@ -154,6 +153,7 @@ public class MainActivity extends AppCompatActivity
     private UiSettings  mUiSettings;
     private Circle      geoFenceLimits;
 
+    // TODO find a way to access renfroLibray lat & lang from Constants file. This is not good!
     private LatLng renfroLibrary = new LatLng(35.827454, -82.551807);
 
     @Override
@@ -185,6 +185,10 @@ public class MainActivity extends AppCompatActivity
 
     private PendingGeofenceTask mPendingGeofenceTask = PendingGeofenceTask.NONE;
 
+
+    /**
+     * Buttons located in the CardView
+     */
     private Button btnMyHours;
     private Button btnViewStudySpot;
 
@@ -200,11 +204,11 @@ public class MainActivity extends AppCompatActivity
             mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
-
         // Create the Floating Action Button that is a quick way to send recorded hours
         // to the default coach
         createFAB();
 
+        // TODO figure out if I actually need to keep track of this
         mRequestingLocationUpdates = true;
 
         // Update values using data stored in the Bundle.
@@ -277,7 +281,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
+    // TODO figure out why the snackbar doesnt push the button up like other activities
     private void createFAB(){
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -437,11 +441,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void getDeviceLocation() {
-    /*
+    /**
      * Get the best and most recent location of the device, which may be null in rare
      * cases when a location is not available.
      */
+    private void getDeviceLocation() {
         try {
             if (checkPermissions()) {
                 Task locationResult = mFusedLocationClient.getLastLocation();
@@ -485,7 +489,6 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         mRequestingLocationUpdates = false;
-                        //setButtonsEnabledState();
                     }
                 });
     }
@@ -495,7 +498,6 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         if (!mRequestingLocationUpdates) {
             mRequestingLocationUpdates = true;
-            // setButtonsEnabledState();
             startLocationUpdates();
         }
 
@@ -730,10 +732,9 @@ public class MainActivity extends AppCompatActivity
        // TODO Add functionality to button
     }
 
-
-    /**
+    /****************************************************************************************
      * Geofence Tasks
-     */
+     ****************************************************************************************/
 
     /**
      * Builds and returns a GeofencingRequest. Specifies the list of geofences to be monitored.
@@ -780,8 +781,6 @@ public class MainActivity extends AppCompatActivity
 
         mGeofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
                 .addOnCompleteListener(this);
-
-        //drawGeofence();
     }
 
     /**
@@ -821,7 +820,6 @@ public class MainActivity extends AppCompatActivity
         mPendingGeofenceTask = PendingGeofenceTask.NONE;
         if (task.isSuccessful()) {
             updateGeofencesAdded(!getGeofencesAdded());
-            //setButtonsEnabledState();
             drawGeofence();
 
             int messageId = getGeofencesAdded() ? R.string.geofences_added :
