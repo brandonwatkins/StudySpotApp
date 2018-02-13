@@ -43,6 +43,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     // Keys for storing activity state in the Bundle.
     private final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
     private final static String KEY_LOCATION = "location";
+    private static final String KEY_CAMERA_POSITION = "camera_position";
 
     /**
      * Provides access to the Fused Location Provider API.
@@ -122,6 +124,9 @@ public class MainActivity extends AppCompatActivity
      */
     private Location mLastKnownLocation;
 
+
+
+    private CameraPosition mCameraPosition;
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
      * Start Updates and Stop Updates buttons.
@@ -144,6 +149,13 @@ public class MainActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Retrieve the device's location and the map's camera position if previously saved:
+        if (savedInstanceState != null) {
+            mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+        }
+
 
         // Create the Floating Action Button that is a quick way to send recorded hours
         // to the default coach
@@ -171,6 +183,7 @@ public class MainActivity extends AppCompatActivity
         btnViewStudySpot = (Button) findViewById(R.id.btn_view_studyspot);
 
     }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -463,7 +476,12 @@ public class MainActivity extends AppCompatActivity
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean(KEY_REQUESTING_LOCATION_UPDATES, mRequestingLocationUpdates);
         savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
-        //savedInstanceState.putString(KEY_LAST_UPDATED_TIME_STRING, mLastUpdateTime);
+
+        if (mMap != null) {
+            savedInstanceState.putParcelable(KEY_CAMERA_POSITION, mMap.getCameraPosition());
+            savedInstanceState.putParcelable(KEY_LOCATION, mLastKnownLocation);
+        }
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
