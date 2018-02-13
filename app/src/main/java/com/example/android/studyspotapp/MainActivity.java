@@ -38,10 +38,12 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     // Keys for storing activity state in the Bundle.
     private final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
     private final static String KEY_LOCATION = "location";
+    private static final String KEY_CAMERA_POSITION = "camera_position";
 
     /**
      * Provides access to the Fused Location Provider API.
@@ -117,6 +120,14 @@ public class MainActivity extends AppCompatActivity
     private Location mCurrentLocation;
 
     /**
+     * Represents the last known location of the device.
+     */
+    private Location mLastKnownLocation;
+
+
+
+    private CameraPosition mCameraPosition;
+    /**
      * Tracks the status of the location updates request. Value changes when the user presses the
      * Start Updates and Stop Updates buttons.
      */
@@ -138,6 +149,13 @@ public class MainActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Retrieve the device's location and the map's camera position if previously saved:
+        if (savedInstanceState != null) {
+            mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+        }
+
 
         // Create the Floating Action Button that is a quick way to send recorded hours
         // to the default coach
@@ -165,6 +183,7 @@ public class MainActivity extends AppCompatActivity
         btnViewStudySpot = (Button) findViewById(R.id.btn_view_studyspot);
 
     }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -235,8 +254,6 @@ public class MainActivity extends AppCompatActivity
                 // is not null.
                 mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
             }
-
-            updateUI();
         }
     }
 
@@ -279,7 +296,6 @@ public class MainActivity extends AppCompatActivity
                 super.onLocationResult(locationResult);
 
                 mCurrentLocation = locationResult.getLastLocation();
-                updateLocationUI();
             }
         };
     }
@@ -308,33 +324,10 @@ public class MainActivity extends AppCompatActivity
                     case Activity.RESULT_CANCELED:
                         Log.i(TAG, "User chose not to make required location settings changes.");
                         mRequestingLocationUpdates = false;
-                        updateUI();
                         break;
                 }
                 break;
         }
-    }
-
-    /**
-     * Handles the Start Updates button and requests start of location updates. Does nothing if
-     * updates have already been requested.
-     */
-    public void startUpdatesButtonHandler(View view) {
-        if (!mRequestingLocationUpdates) {
-            mRequestingLocationUpdates = true;
-            //setButtonsEnabledState();
-            startLocationUpdates();
-        }
-    }
-
-    /**
-     * Handles the Stop Updates button, and requests removal of location updates.
-     */
-    public void stopUpdatesButtonHandler(View view) {
-        // It is a good practice to remove location requests when the activity is in a paused or
-        // stopped state. Doing so helps battery performance and is especially
-        // recommended in applications that request frequent location updates.
-        stopLocationUpdates();
     }
 
     /**
@@ -356,7 +349,6 @@ public class MainActivity extends AppCompatActivity
                         } catch (SecurityException e) {
                             Log.d(TAG, "FAILED to request location updates");
                         }
-                        updateUI();
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
@@ -383,44 +375,39 @@ public class MainActivity extends AppCompatActivity
                                 Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                                 mRequestingLocationUpdates = false;
                         }
-
-                        updateUI();
                     }
                 });
     }
 
-    /**
-     * Updates all UI fields.
-     */
-    private void updateUI() {
-        updateLocationUI();
-    }
 
-    /**
-     * Disables both buttons when functionality is disabled due to insuffucient location settings.
-     * Otherwise ensures that only one button is enabled at any time. The Start Updates button is
-     * enabled if the user is not requesting location updates. The Stop Updates button is enabled
-     * if the user is requesting location updates.
+    private void getDeviceLocation() {
+    /*
+     * Get the best and most recent location of the device, which may be null in rare
+     * cases when a location is not available.
      */
-//    private void setButtonsEnabledState() {
-//        if (mRequestingLocationUpdates) {
-//            mStartUpdatesButton.setEnabled(false);
-//            mStopUpdatesButton.setEnabled(true);
-//        } else {
-//            mStartUpdatesButton.setEnabled(true);
-//            mStopUpdatesButton.setEnabled(false);
-//        }
-//    }
-
-    /**
-     * Sets the value of the UI fields for the location latitude, longitude and last update time.
-     */
-    private void updateLocationUI() {
-        if (mCurrentLocation != null) {
-            /*mLatitudeTextView.setText(String.format(Locale.ENGLISH, "%s: %f", mLatitudeLabel,
-                    mCurrentLocation.getLatitude()));
-            mLongitudeTextView.setText(String.format(Locale.ENGLISH, "%s: %f", mLongitudeLabel,
-                    mCurrentLocation.getLongitude()));*/
+        try {
+            if (checkPermissions()) {
+                Task locationResult = mFusedLocationClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            // Set the map's camera position to the current location of the device.
+                            mLastKnownLocation = (Location) task.getResult();
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(mLastKnownLocation.getLatitude(),
+                                            mLastKnownLocation.getLongitude()), 18f));
+                        } else {
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
+                            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                        }
+                    }
+                });
+            }
+        } catch(SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
         }
     }
 
@@ -473,8 +460,6 @@ public class MainActivity extends AppCompatActivity
         } else if (!checkPermissions()) {
             requestPermissions();
         }
-
-        updateUI();
     }
 
     @Override
@@ -491,7 +476,12 @@ public class MainActivity extends AppCompatActivity
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean(KEY_REQUESTING_LOCATION_UPDATES, mRequestingLocationUpdates);
         savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
-        //savedInstanceState.putString(KEY_LAST_UPDATED_TIME_STRING, mLastUpdateTime);
+
+        if (mMap != null) {
+            savedInstanceState.putParcelable(KEY_CAMERA_POSITION, mMap.getCameraPosition());
+            savedInstanceState.putParcelable(KEY_LOCATION, mLastKnownLocation);
+        }
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -633,7 +623,7 @@ public class MainActivity extends AppCompatActivity
         }
         mUiSettings.setZoomControlsEnabled(true);
 
-
+        getDeviceLocation();
     }
 
     // Callback called when Map is touched
