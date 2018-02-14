@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -192,6 +193,8 @@ public class MainActivity extends AppCompatActivity
     private Button btnMyHours;
     private Button btnViewStudySpot;
 
+    public static Chronometer mCurrentSessionChrono;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -229,6 +232,8 @@ public class MainActivity extends AppCompatActivity
         // UI elements
         btnMyHours = (Button) findViewById(R.id.btn_my_hours);
         btnViewStudySpot = (Button) findViewById(R.id.btn_view_studyspot);
+
+        mCurrentSessionChrono = (Chronometer) findViewById(R.id.ch_current_session_time);
 
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<>();
