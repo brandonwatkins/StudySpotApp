@@ -3,7 +3,10 @@ package com.example.android.studyspotapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +15,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -19,6 +23,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -193,8 +198,9 @@ public class MainActivity extends AppCompatActivity
     private Button btnMyHours;
     private Button btnViewStudySpot;
 
-    public static Chronometer mCurrentSessionChrono;
+    private static Chronometer mCurrentSessionChrono;
 
+    private long timeWhenStopped = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -248,6 +254,7 @@ public class MainActivity extends AppCompatActivity
 
         // Add the geofences
         addGeofences();
+
 
     }
 
@@ -530,6 +537,10 @@ public class MainActivity extends AppCompatActivity
         } else if (!checkPermissions()) {
             requestPermissions();
         }
+
+        // register local broadcast
+        IntentFilter filter = new IntentFilter(GeofenceTransitionsJobIntentService.CUSTOM_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -538,6 +549,9 @@ public class MainActivity extends AppCompatActivity
 
         // Remove location updates to save battery.
         stopLocationUpdates();
+
+        // unregister local broadcast
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     /**
@@ -948,4 +962,33 @@ public class MainActivity extends AppCompatActivity
             removeGeofences();
         }*/
     }
+
+
+    /**
+     * Broadcast receiver to receive the data
+     * This is where I will start the chronometer, create a new StudySession and start recording the
+     * data from the session.
+     */
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String geofenceTransition = intent.getStringExtra("GEO_TRANS");
+            //mDateText.setText(date);
+            if (geofenceTransition.equals("ENTER")) {
+                mCurrentSessionChrono.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+                mCurrentSessionChrono.start();
+                Log.d(TAG, "Start Chronometer!");
+            }
+
+            if (geofenceTransition.equals("EXIT")) {
+                timeWhenStopped = mCurrentSessionChrono.getBase() - SystemClock.elapsedRealtime();
+                mCurrentSessionChrono.stop();
+                Log.d(TAG, "Stop Chronometer!");
+            }
+
+            //Log.d(TAG, "Didnt = ENTER");
+
+        }
+    };
 }

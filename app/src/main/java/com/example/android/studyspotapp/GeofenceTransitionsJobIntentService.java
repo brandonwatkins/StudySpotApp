@@ -24,9 +24,11 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.app.JobIntentService;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,6 +37,8 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,6 +55,9 @@ public class GeofenceTransitionsJobIntentService extends JobIntentService {
     private static final String TAG = "GeofenceTransitionsIS";
 
     private static final String CHANNEL_ID = "channel_01";
+
+    public static final String CUSTOM_ACTION = "YOUR_CUSTOM_ACTION";
+
 
     /**
      * Convenience method for enqueuing work in to this service.
@@ -74,20 +81,39 @@ public class GeofenceTransitionsJobIntentService extends JobIntentService {
             return;
         }
 
+        //LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+
+        //Intent geofenceReceive = new Intent("geofence_receive");
+
+        Intent mIntent = new Intent(CUSTOM_ACTION);
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            // TODO Start chronometer
+
+            mIntent.putExtra("GEO_TRANS", "ENTER");
+            Log.d(TAG, "sending enter broadcast");
+
+            // send local broadcast
+            LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
+
         }
 
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            // TODO Start chronometer
+
+            mIntent.putExtra("GEO_TRANS", "EXIT");
+            Log.d(TAG, "sending exit broadcast");
+
+            // send local broadcast
+            LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
+
         }
 
 
+
+
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
+        /*if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
@@ -97,14 +123,22 @@ public class GeofenceTransitionsJobIntentService extends JobIntentService {
             String geofenceTransitionDetails = getGeofenceTransitionDetails(geofenceTransition,
                     triggeringGeofences);
 
+
+
+            mIntent.putExtra("GEO_TRANS", geofenceTransitionDetails);
+            Log.d(TAG, "sending broadcast");
+
+            // send local broadcast
+            LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
+
             // Send notification and log the transition details.
             //sendNotification(geofenceTransitionDetails);
-            Log.d(TAG, "REGISTERED A TRANSITION!!!");
-            Log.i(TAG, geofenceTransitionDetails);
+
+            //Log.i(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
             Log.e(TAG, getString(R.string.geofence_transition_invalid_type, geofenceTransition));
-        }
+        }*/
     }
 
     /**
