@@ -1,5 +1,7 @@
 package com.example.android.studyspotapp;
 
+import java.util.Date;
+
 /**
  * Created by brandonwatkins on 13/02/18.
  */
@@ -8,7 +10,7 @@ public class StudySession {
 
     private long sessionID;
     private String title;
-    private long dateAndTime;
+    private Date dateAndTime;
     private double sessionLength;
 
     public long getSessionID() {
@@ -27,11 +29,11 @@ public class StudySession {
         this.title = title;
     }
 
-    public long getDateAndTime() {
+    public Date getDateAndTime() {
         return dateAndTime;
     }
 
-    public void setDateAndTime(long dateAndTime) {
+    public void setDateAndTime(Date dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 

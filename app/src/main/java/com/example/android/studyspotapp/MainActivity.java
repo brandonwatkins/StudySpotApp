@@ -63,7 +63,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
@@ -201,6 +205,10 @@ public class MainActivity extends AppCompatActivity
     private static Chronometer mCurrentSessionChrono;
 
     private long timeWhenStopped = 0;
+
+    private long sessionID = 0;
+
+    private Boolean inGeofence = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -976,19 +984,73 @@ public class MainActivity extends AppCompatActivity
             String geofenceTransition = intent.getStringExtra("GEO_TRANS");
             //mDateText.setText(date);
             if (geofenceTransition.equals("ENTER")) {
-                mCurrentSessionChrono.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-                mCurrentSessionChrono.start();
-                Log.d(TAG, "Start Chronometer!");
+                inGeofence = true;
+                startChronometer();
+
+
             }
 
             if (geofenceTransition.equals("EXIT")) {
-                timeWhenStopped = mCurrentSessionChrono.getBase() - SystemClock.elapsedRealtime();
-                mCurrentSessionChrono.stop();
-                Log.d(TAG, "Stop Chronometer!");
-            }
+                stopChronometer();
+                inGeofence = false;
+                createNewStudySession();
+                mCurrentSessionChrono.setBase(SystemClock.elapsedRealtime());
+                timeWhenStopped = 0;
 
-            //Log.d(TAG, "Didnt = ENTER");
+
+            }
 
         }
     };
+
+
+    private void startChronometer() {
+        mCurrentSessionChrono.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+        mCurrentSessionChrono.start();
+        Log.d(TAG, "Chronometer STARTED");
+    }
+
+    private void stopChronometer() {
+        timeWhenStopped = mCurrentSessionChrono.getBase() - SystemClock.elapsedRealtime();
+        Log.d(TAG, "Time stopped; " + timeWhenStopped);
+        mCurrentSessionChrono.stop();
+        Log.d(TAG, "Chronometer STOPPED");
+    }
+
+    private void createNewStudySession() {
+        StudySession ss = new StudySession();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+
+        long sessionTimeMillis = SystemClock.elapsedRealtime() - mCurrentSessionChrono.getBase();
+
+
+        //Convert millis to seconds minutes and hours
+
+        long second = (sessionTimeMillis / 1000) % 60;
+        long minute = (sessionTimeMillis / (1000 * 60)) % 60;
+        long hour = (sessionTimeMillis / (1000 * 60 * 60)) % 24;
+
+        String time = String.format("%02d:%02d:%02d:%d", hour, minute, second, sessionTimeMillis);
+
+        String sessionTitle = dateFormat.format(date);
+        ss.setTitle(sessionTitle);
+        ss.setDateAndTime(date);
+        ss.setSessionLength(sessionTimeMillis);
+        ss.setSessionID(sessionID);
+        sessionID++;
+
+        Log.d(TAG, "Session Title: " + sessionTitle);
+        Log.d(TAG, "Session Date: " + date);
+        Log.d(TAG, "Session length: " + time);
+        Log.d(TAG, "Session ID: " + sessionID);
+
+        //Add database functionality
+
+        /*IOUDb database = IOUDb.getDatabase(this);
+        //database.iouDao().addDebt(d);
+        new AddDebtTask(database).execute(d);*/
+
+    }
 }
