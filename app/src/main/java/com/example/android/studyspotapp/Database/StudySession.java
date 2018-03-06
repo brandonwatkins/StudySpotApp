@@ -1,4 +1,4 @@
-package com.example.android.studyspotapp;
+package com.example.android.studyspotapp.Database;
 
 import java.util.Date;
 
