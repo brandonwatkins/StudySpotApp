@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RingtonePreference
+    <!--<RingtonePreference
         android:key="pref_tone"
         android:title="@string/pref_tone_label"
         android:summary="@string/pref_tone_summ"
         android:showDefault="true"
-        android:showSilent="true"/>
+        android:showSilent="true"/>-->
 
-    <EditTextPreference
-        android:defaultValue="@string/pref_size_default"
-        android:key="@string/pref_size_key"
-        android:title="@string/pref_size_label" />
+    <!--<EditTextPreference-->
+        <!--android:defaultValue="@string/pref_size_default"-->
+        <!--android:key="@string/pref_size_key"-->
+        <!--android:title="@string/pref_size_label" />-->
+
+
+    <ListPreference
+        android:defaultValue="@string/pref_coach_default"
+        android:entries="@array/pref_coach_options"
+        android:entryValues="@array/pref_coach_values"
+        android:key="@string/pref_coach_key"
+        android:title="@string/pref_coach_label" />
 
 
 

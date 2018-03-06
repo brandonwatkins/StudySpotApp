@@ -76,20 +76,24 @@
 
     <!-- Preferences -->
 
-    <!-- Label for the show bass checkbox preference -->
-    <string name="pref_tone_label">Notification Tone</string>
-    <string name="pref_tone_summ">Set ringtone</string>
 
-    <!-- Key name for storing tone in SharedPreferences -->
-    <string name="pref_show_bass_key" translatable="false">show_bass</string>
-
-
-    <!-- Label for the size preference -->
-    <string name="pref_size_label">Size Multiplier</string>
+    <!-- Label for the default coach preference -->
+    <string name="pref_coach_label">Default Coach</string>
 
     <!-- Key name for storing size in SharedPreferences -->
-    <string name="pref_size_key" translatable="false">size</string>
+    <string name="pref_coach_key" translatable="false">coach</string>
 
     <!-- Default for size preference -->
-    <string name="pref_size_default" translatable="false">1</string>
+    <string name="pref_coach_default" translatable="false">Coach Finora</string>
+
+    <!-- Labels for different coaches -->
+    <string name="pref_coach_label_finora">Coach Finora</string>
+    <string name="pref_coach_label_white">Coach White</string>
+    <string name="pref_coach_label_biggerstaff">Coach Biggerstaff</string>
+
+    <!-- Value in SharedPreferences for different coaches -->
+    <string name="pref_coach_finora" translatable="false">finora</string>
+    <string name="pref_coach_white" translatable="false">white</string>
+    <string name="pref_coach_biggerstaff" translatable="false">biggerstaff</string>
+
 </resources>

@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
+import com.example.android.studyspotapp.Settings.SettingsActivity;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -284,9 +285,9 @@ public class MainActivity extends AppCompatActivity
                 //startActivity(new Intent(this, Help.class));
                 return true;
             case R.id.action_settings:
-                //startActivity(new Intent(this, Help.class));
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
