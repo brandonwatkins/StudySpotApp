@@ -76,14 +76,15 @@
 
     <!-- Preferences -->
 
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Label for the default coach preference -->
     <string name="pref_coach_label">Default Coach</string>
 
-    <!-- Key name for storing size in SharedPreferences -->
+    <!-- Key name for storing the coach in SharedPreferences -->
     <string name="pref_coach_key" translatable="false">coach</string>
 
-    <!-- Default for size preference -->
+    <!-- Default for coach preference -->
     <string name="pref_coach_default" translatable="false">Coach Finora</string>
 
     <!-- Labels for different coaches -->
@@ -95,5 +96,14 @@
     <string name="pref_coach_finora" translatable="false">finora</string>
     <string name="pref_coach_white" translatable="false">white</string>
     <string name="pref_coach_biggerstaff" translatable="false">biggerstaff</string>
+
+    <!-- Label for Do Not Disturb checkbox -->
+    <string name="pref_disturb_label">Do Not Disturb</string>
+
+    <!-- Key name for storing Do Not Disturb option in SharedPreferences -->
+    <string name="pref_disturb_key" translatable="false">disturb</string>
+
+    <!-- Default for Do Not Disturb preference -->
+    <string name="pref_disturb_default" translatable="false"></string>
 
 </resources>

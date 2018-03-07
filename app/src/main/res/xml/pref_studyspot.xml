@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<RingtonePreference
-        android:key="pref_tone"
-        android:title="@string/pref_tone_label"
-        android:summary="@string/pref_tone_summ"
-        android:showDefault="true"
-        android:showSilent="true"/>-->
+    <!--<RingtonePreference-->
+        <!--android:key="pref_tone"-->
+        <!--android:title="@string/pref_tone_label"-->
+        <!--android:summary="@string/pref_tone_summ"-->
+        <!--android:showDefault="true"-->
+        <!--android:showSilent="true" />-->
 
-    <!--<EditTextPreference-->
-        <!--android:defaultValue="@string/pref_size_default"-->
-        <!--android:key="@string/pref_size_key"-->
-        <!--android:title="@string/pref_size_label" />-->
+    <!--<SwitchPreferenceCompat-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="@string/pref_disturb_key"-->
+        <!--android:title="@string/pref_disturb_label"/>-->
+
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/pref_disturb_default"
+        android:key="@string/pref_disturb_key"
+        android:title="@string/pref_disturb_label" />
 
 
     <ListPreference
@@ -20,7 +26,6 @@
         android:entryValues="@array/pref_coach_values"
         android:key="@string/pref_coach_key"
         android:title="@string/pref_coach_label" />
-
 
 
 </PreferenceScreen>
