@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
+import com.example.android.studyspotapp.RecordedHours.MyRecordedHoursActivity;
 import com.example.android.studyspotapp.Settings.SettingsActivity;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;

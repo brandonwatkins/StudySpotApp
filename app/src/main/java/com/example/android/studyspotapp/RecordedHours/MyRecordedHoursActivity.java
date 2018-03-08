@@ -1,4 +1,4 @@
-package com.example.android.studyspotapp;
+package com.example.android.studyspotapp.RecordedHours;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.android.studyspotapp.R;
 import com.example.android.studyspotapp.Tabs.TabAllSessions;
 import com.example.android.studyspotapp.Tabs.TabThisWeek;
 
