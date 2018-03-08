@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_coach_options">
+        <item>@string/pref_coach_label_finora</item>
+        <item>@string/pref_coach_label_white</item>
+        <item>@string/pref_coach_label_biggerstaff</item>
+    </string-array>
+
+    <string-array name="pref_coach_values">
+        <item>@string/pref_coach_finora</item>
+        <item>@string/pref_coach_white</item>
+        <item>@string/pref_coach_biggerstaff</item>
+
+    </string-array>
+
+</resources>

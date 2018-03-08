@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
+import com.example.android.studyspotapp.Settings.SettingsActivity;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -71,7 +72,8 @@ public class MainActivity extends AppCompatActivity
         OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
-        OnCompleteListener<Void> {
+        OnCompleteListener<Void>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -206,6 +208,7 @@ public class MainActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupSharedPreferences();
 
         // Retrieve the device's location and the map's camera position if previously saved:
         if (savedInstanceState != null) {
@@ -258,6 +261,37 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    // TODO Setup preferences here
+    private void setupSharedPreferences() {
+        // Get all of the values from shared preferences to set it up
+        SharedPreferences sharedPreferences = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this);
+
+        // TODO Setup the Do Not Disturb preference
+        //mVisualizerView.setShowBass(sharedPreferences.getBoolean(getString(R.string.pref_show_bass_key),
+                //getResources().getBoolean(R.bool.pref_show_bass_default)));
+        // TODO Setup the Default coach for FAB button
+        //mVisualizerView.setShowBass(sharedPreferences.getBoolean(getString(R.string.pref_show_bass_key),
+                //getResources().getBoolean(R.bool.pref_show_bass_default)));
+
+        // Register the listener
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+    }
+
+    // TODO Need to add functionality to preferences from settings screen
+    // Updates the screen if the shared preferences change. This method is required when you make a
+    // class implement OnSharedPreferenceChangedListener
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_disturb_key))) {
+            // TODO Do Not Disturb button functionality
+            //mVisualizerView.setShowBass(sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_show_bass_default)));
+        } else if (key.equals(getString(R.string.pref_coach_key))) {
+            // TODO Set the default coach for the FAB button
+            // mVisualizerView.setShowMid(sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_show_mid_range_default)));
+        }
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
@@ -284,9 +318,9 @@ public class MainActivity extends AppCompatActivity
                 //startActivity(new Intent(this, Help.class));
                 return true;
             case R.id.action_settings:
-                //startActivity(new Intent(this, Help.class));
+                Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(startSettingsActivity);
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -525,6 +559,14 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
 
         stopLocationUpdates();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Unregister MainActivity as an OnPreferenceChangedListener to avoid any memory leaks.
+        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
