@@ -1,30 +1,48 @@
-package com.example.android.studyspotapp;
+package com.example.android.studyspotapp.Database;
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 /**
  * Created by brandonwatkins on 13/02/18.
  */
 
+@Entity
 public class StudySession {
 
-    private long sessionID;
-    private String title;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
     private long dateAndTime;
+
     private double sessionLength;
 
-    public long getSessionID() {
-        return sessionID;
+    private boolean sent;
+
+    private long time;
+
+    public long getTime() {
+        return time;
     }
 
-    public void setSessionID(long sessionID) {
-        this.sessionID = sessionID;
+    public void setTime(long time) {
+        this.time = time;
     }
 
-    public String getTitle() {
-        return title;
+    public boolean isSent() {
+        return sent;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getDateAndTime() {
