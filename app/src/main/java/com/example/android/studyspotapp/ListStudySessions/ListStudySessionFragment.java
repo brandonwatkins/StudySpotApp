@@ -18,11 +18,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.example.android.studyspotapp.Database.StudySession;
+import com.example.android.studyspotapp.R;
 
 import java.util.ArrayList;
-
-import cs421.cs.mhu.edu.iou.R;
-import cs421.cs.mhu.edu.iou.db.Debt;
 
 /**
  * Fragment to list all of the debts owed to the user
@@ -52,8 +50,8 @@ public abstract class ListStudySessionFragment extends Fragment implements
     //boolean flag to know if main FAB is in open or closed state.
     boolean fabExpanded = false;
 
-    //Linear layout holding Add Debt
-    LinearLayout layoutFabAddDebt;
+    //Linear layout holding Add Session
+    LinearLayout layoutFabAddSession;
 
     //Linear layout holding Add Payment
     LinearLayout layoutFabAddPayment;
@@ -65,9 +63,9 @@ public abstract class ListStudySessionFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mView = inflater.inflate(R.layout.fragment_view_debtors, container, false);
+        mView = inflater.inflate(R.layout.fragment_view_sessions, container, false);
 
-        layoutFabAddDebt    = mView.findViewById(R.id.layoutFabAddDebt);
+        layoutFabAddSession = mView.findViewById(R.id.layoutFabAddDebt);
         layoutFabAddPayment = mView.findViewById(R.id.layoutFabAddPayment);
         //layoutFabPhoto  = mView.findViewById(R.id.layoutFabPhoto);
 
@@ -93,7 +91,7 @@ public abstract class ListStudySessionFragment extends Fragment implements
         });
 
         recyclerView = mView.findViewById(R.id.recyclerView);
-        recyclerViewAdapter = new RecyclerViewAdapter(new ArrayList<Debt>(),
+        recyclerViewAdapter = new RecyclerViewAdapter(new ArrayList<StudySession>(),
                 this,
                 this);
         mLayoutManager = new LinearLayoutManager(mView.getContext());
@@ -117,28 +115,28 @@ public abstract class ListStudySessionFragment extends Fragment implements
     }
 
     @Override
-    public boolean onLongClick(View view) { final Debt d = (Debt) view.getTag();
+    public boolean onLongClick(View view) { final StudySession studySession = (StudySession) view.getTag();
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 
-        builder.setTitle("Delete Debt");
-        builder.setMessage("Are you sure you'd like to delete this debt?");
+        builder.setTitle("Delete Session");
+        builder.setMessage("Are you sure you'd like to delete this session?");
         builder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Snackbar deleteAndUndo = Snackbar.make(
-                                ListDebtsFragment.this.getActivity().findViewById(R.id.fab),
-                                "Deleting debt",
+                                ListStudySessionFragment.this.getActivity().findViewById(R.id.fab),
+                                "Deleting session",
                                 Snackbar.LENGTH_SHORT);
                         deleteAndUndo.setAction(R.string.undo_string, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                debtListViewModel.addDebt(lastDeletedDebt);
+                                studySessionListViewModel.addDebt(lastDeletedStudySession);
                             }
                         });
                         deleteAndUndo.show();
-                        lastDeletedDebt = d;
-                        debtListViewModel.deleteDebt(d);
+                        lastDeletedStudySession = studySession;
+                        studySessionListViewModel.deleteDebt(studySession);
                     }
                 });
         builder.setNegativeButton("No",
@@ -154,11 +152,11 @@ public abstract class ListStudySessionFragment extends Fragment implements
 
     @Override
     public void onClick(View view) {
-        Debt d = (Debt) view.getTag();
+        StudySession studySession = (StudySession) view.getTag();
 
         //Toast.makeText(this, d.toString(), Toast.LENGTH_LONG).show();
         //Snackbar.make(this.getActivity().findViewById(R.id.fab), d.toString(),
-        Snackbar.make(this.mView, d.toString(),
+        Snackbar.make(this.mView, studySession.toString(),
                 Snackbar.LENGTH_SHORT)
                 .show();
     }
@@ -182,7 +180,7 @@ public abstract class ListStudySessionFragment extends Fragment implements
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                layoutFabAddDebt.setVisibility(View.INVISIBLE);
+                layoutFabAddSession.setVisibility(View.INVISIBLE);
                 layoutFabAddPayment.setVisibility(View.INVISIBLE);
             }
 
@@ -200,7 +198,7 @@ public abstract class ListStudySessionFragment extends Fragment implements
         animAll.start();
 
         //set icon to '+'
-        addButton.setImageResource(R.drawable.ic_add_white_24dp);
+        addButton.setImageResource(R.drawable.common_google_signin_btn_icon_light_focused);
         fabExpanded = false;
     }
 
@@ -215,12 +213,12 @@ public abstract class ListStudySessionFragment extends Fragment implements
         Animator animAll = ViewAnimationUtils.createCircularReveal(fabFrame, x, y, startRadius, endRadius);
         animAll.setDuration(500);
 
-        layoutFabAddDebt.setVisibility(View.VISIBLE);
+        layoutFabAddSession.setVisibility(View.VISIBLE);
         layoutFabAddPayment.setVisibility(View.VISIBLE);
         animAll.start();
 
         //Change settings icon to check icon
-        addButton.setImageResource(R.drawable.ic_done_white_24dp);
+        addButton.setImageResource(R.drawable.common_google_signin_btn_icon_light_focused);
         fabExpanded = true;
     }
 
