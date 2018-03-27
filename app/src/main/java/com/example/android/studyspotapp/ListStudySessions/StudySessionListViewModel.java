@@ -46,11 +46,11 @@ public class StudySessionListViewModel extends AndroidViewModel {
         return thisWeekStudySessionList;
     }
 
-    void deleteDebt(StudySession s) {
+    void deleteSession(StudySession s) {
         new DeleteStudySessionTask(database).execute(s);
     }
 
-    void addDebt(StudySession s) {
+    void addSession(StudySession s) {
         Log.d("StudySpot", s.toString());
         new AddStudySessionTask(database).execute(s);
     }

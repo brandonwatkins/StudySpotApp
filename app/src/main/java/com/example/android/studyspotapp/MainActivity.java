@@ -1029,7 +1029,6 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "Stop Chronometer!");
             }
 
-            //Log.d(TAG, "Didnt = ENTER");
 
         }
     };

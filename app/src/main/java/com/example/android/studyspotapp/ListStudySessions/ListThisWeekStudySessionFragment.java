@@ -38,7 +38,7 @@ public class ListThisWeekStudySessionFragment extends ListStudySessionFragment {
 
 
         //I will be adding a study session when they leave a geofence. Not on a button
-        addDebt.setOnClickListener(new View.OnClickListener() {
+      /*  addDebt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(mView.getContext(), AddDebtActivity.class);
@@ -55,7 +55,7 @@ public class ListThisWeekStudySessionFragment extends ListStudySessionFragment {
                 i.putExtra(ListDebtsFragment.WHO_OWES_WHOM, ListDebtsFragment.I_OWE);
                 startActivity(i);
             }
-        });
+        });*/
         return v;
     }
 }

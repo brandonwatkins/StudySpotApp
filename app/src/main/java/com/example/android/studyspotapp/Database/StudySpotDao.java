@@ -33,7 +33,7 @@ public interface StudySpotDao {
     @Update
     void updateStudySession(StudySession studySession);
 
-    @Query ("SELECT * FROM Debt WHERE id = :id")
+    @Query ("SELECT * FROM StudySession WHERE id = :id")
     StudySession getStudySessionById(long id);
 
     @Delete
