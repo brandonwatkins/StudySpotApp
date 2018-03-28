@@ -21,10 +21,10 @@ public interface StudySpotDao {
     //@Query("SELECT * FROM StudySession ORDER BY time")
     //LiveData<List<StudySession>> getAllStudySessions();
 
-    @Query("SELECT * FROM StudySession WHERE sent!=0 ORDER BY time")
+    @Query("SELECT * FROM StudySession WHERE sent!=0 ORDER BY dateAndTime")
     LiveData<List<StudySession>> getAllStudySessions();
 
-    @Query("SELECT * FROM StudySession WHERE sent=0 ORDER BY time")
+    @Query("SELECT * FROM StudySession WHERE sent=0 ORDER BY dateAndTime")
     LiveData<List<StudySession>> getThisWeeksStudySessions();
 
     @Insert (onConflict = REPLACE)
@@ -35,6 +35,13 @@ public interface StudySpotDao {
 
     @Query ("SELECT * FROM StudySession WHERE id = :id")
     StudySession getStudySessionById(long id);
+
+    @Query ("SELECT * FROM StudySession WHERE sessionLength=0 ORDER BY id DESC LIMIT 1")
+    StudySession getMostRecentSession();
+
+
+    @Query ("DELETE FROM StudySession WHERE sessionLength=0")
+    void purgeInvalidSessions();
 
     @Delete
     void deleteStudySession(StudySession studySession);

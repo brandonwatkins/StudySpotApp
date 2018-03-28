@@ -29,10 +29,6 @@ public abstract class ListStudySessionFragment extends Fragment implements
         View.OnLongClickListener,
         View.OnClickListener {
 
-    public final static String WHO_OWES_WHOM =  "cs421.cs.mhu.edu.iou.who.owes.whom";
-    public final static String I_OWE =          "cs421.cs.mhu.edu.iou.i.owe";
-    public final static String THEY_OWE =       "cs421.cs.mhu.edu.iou.they.owe";
-
     StudySession lastDeletedStudySession;
 
     StudySessionListViewModel studySessionListViewModel;
@@ -73,7 +69,8 @@ public abstract class ListStudySessionFragment extends Fragment implements
     }
 
     @Override
-    public boolean onLongClick(View view) { final StudySession studySession = (StudySession) view.getTag();
+    public boolean onLongClick(View view) {
+        final StudySession studySession = (StudySession) view.getTag();
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 
         builder.setTitle("Delete Session");

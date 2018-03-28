@@ -7,8 +7,9 @@ import android.util.Log;
 
 import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.Database.StudySpotDb;
-import com.example.android.studyspotapp.Database.Tasks.AddStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.StartStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.DeleteStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.EndStudySessionTask;
 
 import java.util.List;
 
@@ -52,6 +53,16 @@ public class StudySessionListViewModel extends AndroidViewModel {
 
     void addSession(StudySession s) {
         Log.d("StudySpot", s.toString());
-        new AddStudySessionTask(database).execute(s);
+        new StartStudySessionTask(database).execute(s);
+    }
+
+    void startSession(StudySession s) {
+        Log.d("StudySpot", s.toString());
+        new StartStudySessionTask(database).execute(s);
+    }
+
+    void endSession(StudySession s) {
+        Log.d("StudySpot", s.toString());
+        new EndStudySessionTask(database).execute(s);
     }
 }

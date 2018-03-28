@@ -1010,6 +1010,7 @@ public class MainActivity extends AppCompatActivity
      * Broadcast receiver to receive the data
      * This is where I will start the chronometer, create a new StudySession and start recording the
      * data from the session.
+     * In future check if a session is already in use and figure out what are valid sessions.
      */
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -1027,8 +1028,8 @@ public class MainActivity extends AppCompatActivity
                 timeWhenStopped = mCurrentSessionChrono.getBase() - SystemClock.elapsedRealtime();
                 mCurrentSessionChrono.stop();
                 Log.d(TAG, "Stop Chronometer!");
+                //TODO create the StudySession and save it to the database
             }
-
 
         }
     };

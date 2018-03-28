@@ -15,19 +15,9 @@ public class StudySession {
 
     private long dateAndTime;
 
-    private double sessionLength;
+    private int sessionLength;
 
     private boolean sent;
-
-    private long time;
-
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
 
     public boolean isSent() {
         return sent;
@@ -45,6 +35,12 @@ public class StudySession {
         this.id = id;
     }
 
+    public StudySession(long startTime) {
+        dateAndTime = startTime;
+        sent = false;
+        sessionLength = 0;
+    }
+
     public long getDateAndTime() {
         return dateAndTime;
     }
@@ -57,7 +53,7 @@ public class StudySession {
         return sessionLength;
     }
 
-    public void setSessionLength(double sessionLength) {
+    public void setSessionLength(int sessionLength) {
         this.sessionLength = sessionLength;
     }
 
