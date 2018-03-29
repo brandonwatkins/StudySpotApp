@@ -209,8 +209,7 @@ public class MainActivity extends AppCompatActivity
 
     private long timeWhenStopped = 0;
 
-    //Get reference to the apps database
-    StudySpotDb database = StudySpotDb.getDatabase(this);
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -266,6 +265,12 @@ public class MainActivity extends AppCompatActivity
         // Add the geofences
         addGeofences();
 
+        //Get reference to the apps database
+        StudySpotDb database = StudySpotDb.getDatabase(this);
+
+        StudySession s = new StudySession(System.currentTimeMillis());
+        new StartStudySessionTask(database).execute(s);
+        new EndStudySessionTask(database).execute(s);
 
 
 
@@ -1035,8 +1040,8 @@ public class MainActivity extends AppCompatActivity
                 mCurrentSessionChrono.start();
                 Log.d(TAG, "Start Chronometer!");
 
-                StudySession s = new StudySession(System.currentTimeMillis());
-                new StartStudySessionTask(database).execute(s); //Had to make database a global
+//                StudySession s = new StudySession(System.currentTimeMillis());
+//                new StartStudySessionTask(database).execute(s); //Had to make database a global
 
 
             }
@@ -1048,8 +1053,8 @@ public class MainActivity extends AppCompatActivity
                 //TODO create the StudySession and save it to the database
                 StudySession s = new StudySession();
 
-                new GetMostRecentStudySessionTask(database).execute(s);
-                new EndStudySessionTask(database).execute(s);
+//                new GetMostRecentStudySessionTask(database).execute(s);
+//                new EndStudySessionTask(database).execute(s);
             }
 
         }
