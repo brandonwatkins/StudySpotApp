@@ -41,6 +41,10 @@ public class StudySession {
         sessionLength = 0;
     }
 
+    public StudySession() {
+
+    }
+
     public long getDateAndTime() {
         return dateAndTime;
     }
@@ -49,7 +53,7 @@ public class StudySession {
         this.dateAndTime = dateAndTime;
     }
 
-    public double getSessionLength() {
+    public int getSessionLength() {
         return sessionLength;
     }
 

@@ -34,6 +34,11 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
+import com.example.android.studyspotapp.Database.StudySession;
+import com.example.android.studyspotapp.Database.StudySpotDb;
+import com.example.android.studyspotapp.Database.Tasks.EndStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.GetMostRecentStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.StartStudySessionTask;
 import com.example.android.studyspotapp.Settings.SettingsActivity;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -204,6 +209,9 @@ public class MainActivity extends AppCompatActivity
 
     private long timeWhenStopped = 0;
 
+    //Get reference to the apps database
+    StudySpotDb database = StudySpotDb.getDatabase(this);
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -257,6 +265,9 @@ public class MainActivity extends AppCompatActivity
 
         // Add the geofences
         addGeofences();
+
+
+
 
 
     }
@@ -1012,16 +1023,22 @@ public class MainActivity extends AppCompatActivity
      * data from the session.
      * In future check if a session is already in use and figure out what are valid sessions.
      */
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             String geofenceTransition = intent.getStringExtra("GEO_TRANS");
-            //mDateText.setText(date);
+
             if (geofenceTransition.equals("ENTER")) {
                 mCurrentSessionChrono.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
                 mCurrentSessionChrono.start();
                 Log.d(TAG, "Start Chronometer!");
+
+                StudySession s = new StudySession(System.currentTimeMillis());
+                new StartStudySessionTask(database).execute(s); //Had to make database a global
+
+
             }
 
             if (geofenceTransition.equals("EXIT")) {
@@ -1029,6 +1046,10 @@ public class MainActivity extends AppCompatActivity
                 mCurrentSessionChrono.stop();
                 Log.d(TAG, "Stop Chronometer!");
                 //TODO create the StudySession and save it to the database
+                StudySession s = new StudySession();
+
+                new GetMostRecentStudySessionTask(database).execute(s);
+                new EndStudySessionTask(database).execute(s);
             }
 
         }
