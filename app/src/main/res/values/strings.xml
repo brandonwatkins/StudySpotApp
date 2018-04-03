@@ -106,4 +106,7 @@
     <!-- Default for Do Not Disturb preference -->
     <string name="pref_disturb_default" translatable="false"></string>
 
+
+    <string name="undo_string">Undo</string>
+
 </resources>

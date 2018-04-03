@@ -9,10 +9,10 @@ import com.example.android.studyspotapp.Database.StudySpotDb;
  * Created by Brandon Watkins
  */
 
-public class AddStudySessionTask extends AsyncTask<StudySession, Void, Void> {
+public class StartStudySessionTask extends AsyncTask<StudySession, Void, Void> {
     private StudySpotDb studySpotDb;
 
-    public AddStudySessionTask(StudySpotDb studySpotDb) {
+    public StartStudySessionTask(StudySpotDb studySpotDb) {
         this.studySpotDb = studySpotDb;
     }
 

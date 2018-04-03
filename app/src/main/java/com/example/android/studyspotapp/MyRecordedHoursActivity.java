@@ -15,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.android.studyspotapp.ListStudySessions.ListOverallStudySessionFragment;
+import com.example.android.studyspotapp.ListStudySessions.ListStudySessionFragment;
+import com.example.android.studyspotapp.ListStudySessions.ListThisWeekStudySessionFragment;
 import com.example.android.studyspotapp.Tabs.TabAllSessions;
 import com.example.android.studyspotapp.Tabs.TabThisWeek;
 
@@ -112,11 +115,13 @@ public class MyRecordedHoursActivity extends AppCompatActivity {
 
             switch(position) {
                 case 0:
-                    TabThisWeek tabThisWeek = new TabThisWeek();
-                    return tabThisWeek;
+//                    TabThisWeek tabThisWeek = new TabThisWeek();
+//                    return tabThisWeek;
+                    return new ListThisWeekStudySessionFragment();
                 case 1:
-                    TabAllSessions tabAllSessions = new TabAllSessions();
-                    return tabAllSessions;
+//                    TabAllSessions tabAllSessions = new TabAllSessions();
+//                    return tabAllSessions;
+                    return new ListOverallStudySessionFragment();
                 default:
                     return null;
             }
