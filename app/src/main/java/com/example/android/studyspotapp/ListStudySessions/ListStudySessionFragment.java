@@ -109,9 +109,15 @@ public abstract class ListStudySessionFragment extends Fragment implements
     public void onClick(View view) {
         StudySession studySession = (StudySession) view.getTag();
 
+//        Snackbar.make(this.mView, studySession.toString(),
+//                Snackbar.LENGTH_SHORT)
+//                .show();
+
         Snackbar.make(this.mView, studySession.toString(),
-                Snackbar.LENGTH_SHORT)
+                Snackbar.LENGTH_LONG)
                 .show();
+
+        studySession.setSent(true);
     }
 
 }

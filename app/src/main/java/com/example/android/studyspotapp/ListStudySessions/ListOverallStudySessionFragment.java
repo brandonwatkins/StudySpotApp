@@ -26,7 +26,7 @@ public class ListOverallStudySessionFragment extends ListStudySessionFragment {
 
         studySessionListViewModel = ViewModelProviders.of(this).get(StudySessionListViewModel.class);
 
-        studySessionListViewModel.getThisWeekStudySessionList().observe(this,
+        studySessionListViewModel.getOverallStudySessionList().observe(this,
                 new Observer<List<StudySession>>(){
                     @Override
                     public void onChanged(@Nullable List<StudySession> studySessions){
