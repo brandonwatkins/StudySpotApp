@@ -280,6 +280,12 @@ public class MainActivity extends AppCompatActivity
         new EndStudySessionTask(database).execute(s);
 
 
+        StudySession ss = new StudySession(System.currentTimeMillis());
+        new StartStudySessionTask(database).execute(ss);
+        ss.setSent(true);
+        new EndStudySessionTask(database).execute(ss);
+
+
 
 
     }
