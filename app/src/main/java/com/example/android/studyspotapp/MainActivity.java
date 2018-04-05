@@ -1,6 +1,7 @@
 package com.example.android.studyspotapp;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -69,6 +70,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -217,6 +219,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setupSharedPreferences();
 
+        Log.d(TAG, "EPOCH TIME: " + System.currentTimeMillis());
+
         // Retrieve the device's location and the map's camera position if previously saved:
         if (savedInstanceState != null) {
             mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
@@ -267,6 +271,9 @@ public class MainActivity extends AppCompatActivity
 
         //Get reference to the apps database
         StudySpotDb database = StudySpotDb.getDatabase(this);
+
+//        Instant instant = Instant.now();
+//        long timeStampMillis = instant.toEpochMilli();
 
         StudySession s = new StudySession(System.currentTimeMillis());
         new StartStudySessionTask(database).execute(s);

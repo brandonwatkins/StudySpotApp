@@ -50,25 +50,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         StudySession studySession = studySessionList.get(position);
 
-       // String title = Long.toString(studySession.getDateAndTime());
-//
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//        sdf.format(new Date(studySession.getDateAndTime()));
-
-//        String date = new java.text.SimpleDateFormat("MM/dd/yyyy")
-//                .format(new java.util.Date ((studySession.getDateAndTime()) * 1000));
-
-        Date date = new Date((studySession.getDateAndTime()) * 1000L);
-        DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        Date date = new Date((studySession.getDateAndTime()));
+        DateFormat format = new SimpleDateFormat("EEE, MMM d yyyy");
         format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
         String formattedDate = format.format(date);
 
         holder.titleTextView.setText(formattedDate);
 
         String sessionLength = Double.toString(studySession.getSessionLength());
-        holder.sessionLengthTextView.setText(sessionLength);
+        holder.sessionLengthTextView.setText("Session Length: " + sessionLength);
 
-        holder.amountTextView.setText("Place Holder");
+        //holder.amountTextView.setText("Place Holder");
         holder.itemView.setTag(studySession);
         holder.itemView.setOnLongClickListener(longClickListener);
         holder.itemView.setOnClickListener(clickListener);
@@ -87,13 +79,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     static class RecyclerViewHolder extends RecyclerView.ViewHolder {
         private TextView titleTextView;
         private TextView sessionLengthTextView;
-        private TextView amountTextView;
+       //private TextView amountTextView;
 
         RecyclerViewHolder(View view) {
             super(view);
             titleTextView           =    view.findViewById(R.id.tv_title);
             sessionLengthTextView   =    view.findViewById(R.id.tv_sessionLength);
-            amountTextView          =    view.findViewById(R.id.tv_amount);
+            //amountTextView        =    view.findViewById(R.id.tv_amount);
         }
     }
 
