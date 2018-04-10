@@ -57,8 +57,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.titleTextView.setText(formattedDate);
 
-        String sessionLength = Double.toString(studySession.getSessionLength());
-        holder.sessionLengthTextView.setText("Session Length: " + sessionLength);
+        //String sessionLength = Double.toString();
+        holder.sessionLengthTextView.setText("Session Length: " + studySession.getStudySessionDisplay(studySession.getSessionLength()));
 
         //holder.amountTextView.setText("Place Holder");
         holder.itemView.setTag(studySession);

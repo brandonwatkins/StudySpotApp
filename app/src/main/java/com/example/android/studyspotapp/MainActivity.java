@@ -1,7 +1,6 @@
 package com.example.android.studyspotapp;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -38,7 +37,7 @@ import android.widget.Toast;
 import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.Database.StudySpotDb;
 import com.example.android.studyspotapp.Database.Tasks.EndStudySessionTask;
-import com.example.android.studyspotapp.Database.Tasks.GetMostRecentStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.EndMostRecentStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.StartStudySessionTask;
 import com.example.android.studyspotapp.Settings.SettingsActivity;
 import com.google.android.gms.common.api.ApiException;
@@ -70,7 +69,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -211,6 +209,8 @@ public class MainActivity extends AppCompatActivity
 
     private long timeWhenStopped = 0;
 
+    StudySpotDb database;
+
 
 
     @Override
@@ -270,20 +270,12 @@ public class MainActivity extends AppCompatActivity
         addGeofences();
 
         //Get reference to the apps database
-        StudySpotDb database = StudySpotDb.getDatabase(this);
+        database = StudySpotDb.getDatabase(this);
 
 //        Instant instant = Instant.now();
 //        long timeStampMillis = instant.toEpochMilli();
 
-        StudySession s = new StudySession(System.currentTimeMillis());
-        new StartStudySessionTask(database).execute(s);
-        new EndStudySessionTask(database).execute(s);
 
-
-        StudySession ss = new StudySession(System.currentTimeMillis());
-        new StartStudySessionTask(database).execute(ss);
-        ss.setSent(true);
-        new EndStudySessionTask(database).execute(ss);
 
 
 
@@ -1053,9 +1045,9 @@ public class MainActivity extends AppCompatActivity
                 mCurrentSessionChrono.start();
                 Log.d(TAG, "Start Chronometer!");
 
-//                StudySession s = new StudySession(System.currentTimeMillis());
-//                new StartStudySessionTask(database).execute(s); //Had to make database a global
-
+                StudySession s = new StudySession(System.currentTimeMillis());
+                Log.d(TAG, "Create NEW StudySession");
+                new StartStudySessionTask(database).execute(s);
 
             }
 
@@ -1064,10 +1056,11 @@ public class MainActivity extends AppCompatActivity
                 mCurrentSessionChrono.stop();
                 Log.d(TAG, "Stop Chronometer!");
                 //TODO create the StudySession and save it to the database
-                StudySession s = new StudySession();
 
-//                new GetMostRecentStudySessionTask(database).execute(s);
-//                new EndStudySessionTask(database).execute(s);
+                Log.d(TAG, "GET MOST RECENT StudySession");
+                new EndMostRecentStudySessionTask(database).execute();
+                Log.d(TAG, "END StudySession");
+                //new EndStudySessionTask(database).execute(s);
             }
 
         }

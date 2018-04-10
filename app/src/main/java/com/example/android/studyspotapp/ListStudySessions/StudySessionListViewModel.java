@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.Database.StudySpotDb;
+import com.example.android.studyspotapp.Database.Tasks.EndMostRecentStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.StartStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.DeleteStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.EndStudySessionTask;
@@ -63,6 +64,6 @@ public class StudySessionListViewModel extends AndroidViewModel {
 
     void endSession(StudySession s) {
         Log.d("StudySpot", s.toString());
-        new EndStudySessionTask(database).execute(s);
+        new EndMostRecentStudySessionTask(database).execute();
     }
 }
