@@ -57,8 +57,21 @@ public class StudySession {
         return sessionLength;
     }
 
+    public String getStudySessionDisplay(int sessionLength) {
+        int length = sessionLength;
+        length /= 1000;
+        int min = length / 60;
+        length %= 60;
+
+        return Integer.toString(length);
+    }
+
     public void setSessionLength(int sessionLength) {
         this.sessionLength = sessionLength;
+    }
+
+    public void setSessionEndTime(long endTime) {
+        sessionLength = (int) (endTime - dateAndTime);
     }
 
     public String toString() {
