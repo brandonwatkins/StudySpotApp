@@ -38,6 +38,7 @@ import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.Database.StudySpotDb;
 import com.example.android.studyspotapp.Database.Tasks.EndStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.EndMostRecentStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.StartStudySessionTask;
 import com.example.android.studyspotapp.Settings.SettingsActivity;
 import com.google.android.gms.common.api.ApiException;
@@ -71,6 +72,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -206,6 +208,8 @@ public class MainActivity extends AppCompatActivity
     private Button btnViewStudySpot;
 
     private static Chronometer mCurrentSessionChrono;
+    private static Chronometer mWeeklySessionTotalChrono;
+
 
     private long timeWhenStopped = 0;
 
@@ -254,6 +258,9 @@ public class MainActivity extends AppCompatActivity
         btnViewStudySpot = (Button) findViewById(R.id.btn_view_studyspot);
 
         mCurrentSessionChrono = (Chronometer) findViewById(R.id.ch_current_session_time);
+        mWeeklySessionTotalChrono = (Chronometer) findViewById(R.id.ch_weekly_total_time);
+
+
 
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<>();
@@ -274,6 +281,21 @@ public class MainActivity extends AppCompatActivity
 
 //        Instant instant = Instant.now();
 //        long timeStampMillis = instant.toEpochMilli();
+
+        // TODO set base to total session length for all sessions this week
+        try {
+            long weeklyTotal = new GetWeeklyTotalStudySessionTask(database).execute().get();
+            Log.d(TAG, "Weekly total: " + weeklyTotal);
+
+            mChronometer.setBase(SystemClock.elapsedRealtime() - (weeklyTotal * 1000)))
+
+            mWeeklySessionTotalChrono.setBase(SystemClock.elapsedRealtime() - (weeklyTotal * 1000));
+            mWeeklySessionTotalChrono.start();
+        } catch (InterruptedException i) {
+            i.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
 
