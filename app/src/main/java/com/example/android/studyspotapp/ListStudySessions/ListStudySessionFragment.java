@@ -3,6 +3,7 @@ package com.example.android.studyspotapp.ListStudySessions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +19,18 @@ import android.widget.LinearLayout;
 
 import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.R;
+import com.example.android.studyspotapp.pdfUtils;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -114,6 +126,14 @@ public abstract class ListStudySessionFragment extends Fragment implements
                 Snackbar.LENGTH_LONG)
                 .show();
 
+        /**
+        * Creates a PDF file: hello.pdf
+        * @param    args    no arguments needed
+        */
+
+        Uri path = Uri.fromFile(filelocation);
+
+
         String TO, SUBJECT, MESSAGE;
         Intent intent;
 
@@ -126,10 +146,25 @@ public abstract class ListStudySessionFragment extends Fragment implements
         intent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
         intent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
 
+
         intent.setType("message/rfc822");
+
+
+        try {
+            Document document = new pdfUtils().createPdf("Test.pdf");
+            //intent.putExtra(Intent.EXTRA_STREAM, path);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, baos);
+        } catch (DocumentException d) {
+            d.printStackTrace();
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
 
         startActivity(Intent.createChooser(intent, "Select Email Sending App:"));
 
     }
+
+
 
 }
