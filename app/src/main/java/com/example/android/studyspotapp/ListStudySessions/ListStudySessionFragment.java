@@ -2,6 +2,7 @@ package com.example.android.studyspotapp.ListStudySessions;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -109,15 +110,26 @@ public abstract class ListStudySessionFragment extends Fragment implements
     public void onClick(View view) {
         StudySession studySession = (StudySession) view.getTag();
 
-//        Snackbar.make(this.mView, studySession.toString(),
-//                Snackbar.LENGTH_SHORT)
-//                .show();
-
         Snackbar.make(this.mView, studySession.toString(),
                 Snackbar.LENGTH_LONG)
                 .show();
 
-        studySession.setSent(true);
+        String TO, SUBJECT, MESSAGE;
+        Intent intent;
+
+        SUBJECT = "Test Subject";
+        MESSAGE = "Test Message";
+        TO = "brandonwatkinsnz@gmail.com";
+        intent = new Intent(Intent.ACTION_SEND);
+
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
+        intent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
+        intent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
+
+        intent.setType("message/rfc822");
+
+        startActivity(Intent.createChooser(intent, "Select Email Sending App:"));
+
     }
 
 }
