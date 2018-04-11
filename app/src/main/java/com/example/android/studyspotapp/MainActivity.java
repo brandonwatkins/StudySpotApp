@@ -279,29 +279,40 @@ public class MainActivity extends AppCompatActivity
         //Get reference to the apps database
         database = StudySpotDb.getDatabase(this);
 
-//        Instant instant = Instant.now();
-//        long timeStampMillis = instant.toEpochMilli();
+
 
         // TODO set base to total session length for all sessions this week
         try {
             long weeklyTotal = new GetWeeklyTotalStudySessionTask(database).execute().get();
             Log.d(TAG, "Weekly total: " + weeklyTotal);
 
-            long millis = weeklyTotal;  // obtained from StopWatch
+            long millis = weeklyTotal;
             long minutes = (millis / 1000)  / 60;
             long seconds = (millis / 1000) % 60;
 
             mWeeklySessionTotalChrono.setBase(SystemClock.elapsedRealtime() - (minutes * 60000 + seconds * 1000));
-            mWeeklySessionTotalChrono.start();
+
+//            mWeeklySessionTotalChrono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
+//                @Override
+//                public void onChronometerTick(Chronometer cArg) {
+//                    long time = SystemClock.elapsedRealtime() - cArg.getBase();
+//                    int h   = (int)(time / 3600000);
+//                    int m   = (int)(time - h * 3600000) / 60000;
+//                    int s   = (int)(time - h * 3600000 - m * 60000) / 1000 ;
+//                    String hh = h < 10 ? "0"+h: h+"";
+//                    String mm = m < 10 ? "0"+m: m+"";
+//                    String ss = s < 10 ? "0"+s: s+"";
+//                    cArg.setText(hh+":"+mm+":"+ss);
+//                }
+//            });
+//            mWeeklySessionTotalChrono.setBase(SystemClock.elapsedRealtime());
+//            //mWeeklySessionTotalChrono.start();
+
         } catch (InterruptedException i) {
             i.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-
-
-
 
 
     }
@@ -1067,6 +1078,8 @@ public class MainActivity extends AppCompatActivity
             if (geofenceTransition.equals("ENTER")) {
                 mCurrentSessionChrono.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
                 mCurrentSessionChrono.start();
+                mWeeklySessionTotalChrono.start();
+
                 Log.d(TAG, "Start Chronometer!");
 
                 StudySession s = new StudySession(System.currentTimeMillis());
