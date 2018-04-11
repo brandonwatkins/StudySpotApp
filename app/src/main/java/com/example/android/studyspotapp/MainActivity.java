@@ -287,9 +287,11 @@ public class MainActivity extends AppCompatActivity
             long weeklyTotal = new GetWeeklyTotalStudySessionTask(database).execute().get();
             Log.d(TAG, "Weekly total: " + weeklyTotal);
 
-            mChronometer.setBase(SystemClock.elapsedRealtime() - (weeklyTotal * 1000)))
+            long millis = weeklyTotal;  // obtained from StopWatch
+            long minutes = (millis / 1000)  / 60;
+            long seconds = (millis / 1000) % 60;
 
-            mWeeklySessionTotalChrono.setBase(SystemClock.elapsedRealtime() - (weeklyTotal * 1000));
+            mWeeklySessionTotalChrono.setBase(SystemClock.elapsedRealtime() - (minutes * 60000 + seconds * 1000));
             mWeeklySessionTotalChrono.start();
         } catch (InterruptedException i) {
             i.printStackTrace();
