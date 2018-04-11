@@ -38,6 +38,7 @@ import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.Database.StudySpotDb;
 import com.example.android.studyspotapp.Database.Tasks.EndStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.EndMostRecentStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.StartStudySessionTask;
 import com.example.android.studyspotapp.Settings.SettingsActivity;
 import com.google.android.gms.common.api.ApiException;
@@ -71,6 +72,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -206,6 +208,8 @@ public class MainActivity extends AppCompatActivity
     private Button btnViewStudySpot;
 
     private static Chronometer mCurrentSessionChrono;
+    private static Chronometer mWeeklySessionTotalChrono;
+
 
     private long timeWhenStopped = 0;
 
@@ -254,6 +258,9 @@ public class MainActivity extends AppCompatActivity
         btnViewStudySpot = (Button) findViewById(R.id.btn_view_studyspot);
 
         mCurrentSessionChrono = (Chronometer) findViewById(R.id.ch_current_session_time);
+        mWeeklySessionTotalChrono = (Chronometer) findViewById(R.id.ch_weekly_total_time);
+
+
 
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<>();
@@ -272,12 +279,40 @@ public class MainActivity extends AppCompatActivity
         //Get reference to the apps database
         database = StudySpotDb.getDatabase(this);
 
-//        Instant instant = Instant.now();
-//        long timeStampMillis = instant.toEpochMilli();
 
 
+        // TODO set base to total session length for all sessions this week
+        try {
+            long weeklyTotal = new GetWeeklyTotalStudySessionTask(database).execute().get();
+            Log.d(TAG, "Weekly total: " + weeklyTotal);
 
+            long millis = weeklyTotal;
+            long minutes = (millis / 1000)  / 60;
+            long seconds = (millis / 1000) % 60;
 
+            mWeeklySessionTotalChrono.setBase(SystemClock.elapsedRealtime() - (minutes * 60000 + seconds * 1000));
+
+//            mWeeklySessionTotalChrono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
+//                @Override
+//                public void onChronometerTick(Chronometer cArg) {
+//                    long time = SystemClock.elapsedRealtime() - cArg.getBase();
+//                    int h   = (int)(time / 3600000);
+//                    int m   = (int)(time - h * 3600000) / 60000;
+//                    int s   = (int)(time - h * 3600000 - m * 60000) / 1000 ;
+//                    String hh = h < 10 ? "0"+h: h+"";
+//                    String mm = m < 10 ? "0"+m: m+"";
+//                    String ss = s < 10 ? "0"+s: s+"";
+//                    cArg.setText(hh+":"+mm+":"+ss);
+//                }
+//            });
+//            mWeeklySessionTotalChrono.setBase(SystemClock.elapsedRealtime());
+//            //mWeeklySessionTotalChrono.start();
+
+        } catch (InterruptedException i) {
+            i.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -1043,6 +1078,8 @@ public class MainActivity extends AppCompatActivity
             if (geofenceTransition.equals("ENTER")) {
                 mCurrentSessionChrono.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
                 mCurrentSessionChrono.start();
+                mWeeklySessionTotalChrono.start();
+
                 Log.d(TAG, "Start Chronometer!");
 
                 StudySession s = new StudySession(System.currentTimeMillis());
