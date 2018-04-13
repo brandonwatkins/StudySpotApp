@@ -146,7 +146,6 @@ public abstract class ListStudySessionFragment extends Fragment implements
         intent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
         intent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
 
-
         intent.setType("message/rfc822");
 
 
