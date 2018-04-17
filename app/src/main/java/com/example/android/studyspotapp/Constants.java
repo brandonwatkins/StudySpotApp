@@ -47,7 +47,7 @@ final class Constants {
     static final float GEOFENCE_RADIUS_IN_METERS = 35;
 
     /**
-     * Map for storing information about airports in the San Francisco bay area.
+     * Map for storing information about geofences.
      */
     static final HashMap<String, LatLng> STUDYSPOT_GEOFENCES = new HashMap<>();
 
