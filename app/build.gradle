@@ -37,4 +37,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
+    compile 'com.itextpdf:itextpdf:5.0.6'
+
+
 }

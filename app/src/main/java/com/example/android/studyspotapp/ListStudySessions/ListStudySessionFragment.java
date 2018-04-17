@@ -2,9 +2,8 @@ package com.example.android.studyspotapp.ListStudySessions;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-
 import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.R;
+import com.example.android.studyspotapp.pdfUtils;
 
 import java.util.ArrayList;
 
@@ -117,7 +114,28 @@ public abstract class ListStudySessionFragment extends Fragment implements
                 Snackbar.LENGTH_LONG)
                 .show();
 
-        studySession.setSent(true);
+        //new SimplePdf().createPdf(DEST);
+        new pdfUtils.write();
+
+
+        //studySession.setSent(true);
+
+        String TO, SUBJECT, MESSAGE;
+        Intent intent;
+
+        SUBJECT = "Test Subject";
+        MESSAGE = "Test Message";
+        TO = "brandonwatkinsnz@gmail.com";
+        intent = new Intent(Intent.ACTION_SEND);
+
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
+        intent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
+        intent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
+
+        intent.setType("message/rfc822");
+
+        startActivity(Intent.createChooser(intent, "Select Email Sending App:"));
     }
+
 
 }
