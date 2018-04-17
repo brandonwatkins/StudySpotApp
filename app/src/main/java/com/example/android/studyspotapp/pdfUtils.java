@@ -1,5 +1,7 @@
 package com.example.android.studyspotapp;
 
+import android.util.Log;
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -17,7 +19,7 @@ public class pdfUtils {
     public Boolean write(String fname, String fcontent) {
         try {
             //Create file path for Pdf
-            String fpath = "/sdcard/" + fname + ".pdf";
+            String fpath = "sdcard/" + fname + ".pdf";
             File file = new File(fpath);
             if (!file.exists()) {
                 file.createNewFile();
@@ -38,12 +40,16 @@ public class pdfUtils {
             document.add(new Paragraph("Hello World"));
             // close document
             document.close();
+            Log.d("PDFUTILS", "PDF created");
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d("PDFUTILS", "PDF NOT created (IOException)");
+
             return false;
         } catch (DocumentException e) {
             e.printStackTrace();
+            Log.d("PDFUTILS", "PDF created (DocumentException)");
             return false;
         }
     }

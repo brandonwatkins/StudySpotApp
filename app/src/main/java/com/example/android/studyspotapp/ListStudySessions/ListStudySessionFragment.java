@@ -3,7 +3,9 @@ package com.example.android.studyspotapp.ListStudySessions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.R;
 import com.example.android.studyspotapp.pdfUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -115,26 +118,32 @@ public abstract class ListStudySessionFragment extends Fragment implements
                 .show();
 
         //new SimplePdf().createPdf(DEST);
-        new pdfUtils.write();
-
+        new pdfUtils().write("test", "null");
 
         //studySession.setSent(true);
 
         String TO, SUBJECT, MESSAGE;
-        Intent intent;
+
+        String filename="test.pdf";
+        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
+        Uri path = Uri.fromFile(filelocation);
+
+        Intent emailIntent;
 
         SUBJECT = "Test Subject";
         MESSAGE = "Test Message";
         TO = "brandonwatkinsnz@gmail.com";
-        intent = new Intent(Intent.ACTION_SEND);
+        emailIntent = new Intent(Intent.ACTION_SEND);
 
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
-        intent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
-        intent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
+        // the attachment
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
 
-        intent.setType("message/rfc822");
+        emailIntent.setType("message/rfc822");
 
-        startActivity(Intent.createChooser(intent, "Select Email Sending App:"));
+        startActivity(Intent.createChooser(emailIntent, "Select Email Sending App:"));
     }
 
 
