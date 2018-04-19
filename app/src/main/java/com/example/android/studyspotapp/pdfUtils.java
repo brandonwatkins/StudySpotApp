@@ -1,5 +1,6 @@
 package com.example.android.studyspotapp;
 
+import android.os.Environment;
 import android.util.Log;
 
 import com.itextpdf.text.BaseColor;
@@ -19,8 +20,12 @@ public class pdfUtils {
     public Boolean write(String fname, String fcontent) {
         try {
             //Create file path for Pdf
-            String fpath = "sdcard/" + fname + ".pdf";
-            File file = new File(fpath);
+            //String fpath = "sdcard/" + fname + ".pdf";
+
+            String extStorage = Environment.getExternalStorageState();
+            String path = extStorage + "/Android/data/com.example.android.studyspotapp/" + fname + ".pdf";
+
+            File file = new File(path);
             if (!file.exists()) {
                 file.createNewFile();
             }
