@@ -130,7 +130,7 @@ public abstract class ListStudySessionFragment extends Fragment implements
 
         Intent emailIntent;
 
-        SUBJECT = "Test Subject";
+        SUBJECT = "StudySpot Weekly Report";
         MESSAGE = "Test Message";
         TO = "brandonwatkinsnz@gmail.com";
         emailIntent = new Intent(Intent.ACTION_SEND);

@@ -13,6 +13,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class pdfUtils {
     //write method takes two parameter pdf name and content
@@ -22,8 +24,11 @@ public class pdfUtils {
             //Create file path for Pdf
             //String fpath = "sdcard/" + fname + ".pdf";
 
+            Date date = new Date() ;
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+
             String extStorage = Environment.getExternalStorageState();
-            String path = extStorage + "/Android/data/com.example.android.studyspotapp/" + fname + ".pdf";
+            String path = extStorage + "/Android/data/com.example.android.studyspotapp/" + fname + ": " + timeStamp + ".pdf";
 
             File file = new File(path);
             if (!file.exists()) {
