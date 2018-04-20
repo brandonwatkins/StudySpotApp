@@ -14,13 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.android.studyspotapp.Database.StudySession;
+import com.example.android.studyspotapp.Database.StudySpotDb;
+import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
+import com.example.android.studyspotapp.MainActivity;
 import com.example.android.studyspotapp.R;
 import com.example.android.studyspotapp.pdfUtils;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Fragment to list all of the study sessions
@@ -120,14 +125,36 @@ public abstract class ListStudySessionFragment extends Fragment implements
                 .show();
 
         Date date = new Date();
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+        String timeStamp = new SimpleDateFormat("MM-dd-yyyy").format(date);
 
         String fileName = "StudySpot_" + timeStamp + ".pdf";
 
-        //new SimplePdf().createPdf(DEST);
-        new pdfUtils().write(fileName, "null", "null", true);
+        long weeklyTotal;
+        long hoursRemaining;
+        boolean hadEnoughHours = true;
 
-        //studySession.setSent(true);
+        try {
+            weeklyTotal = new GetWeeklyTotalStudySessionTask(StudySpotDb.getDatabase(view.getContext())).execute().get();
+            Date time = new Date(weeklyTotal);
+            DateFormat format = new SimpleDateFormat("HH:mm:ss");
+            String totalHoursCompleted = format.format(time);
+
+            hoursRemaining = 28800 - weeklyTotal;
+
+            if (hoursRemaining >= 0) {
+                hadEnoughHours = false;
+            }
+
+            Date time2 = new Date(hoursRemaining);
+            String totalHoursRemaining = format.format(time2);
+
+            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours);
+
+        } catch (InterruptedException i) {
+            i.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
         String TO, SUBJECT, MESSAGE;
 
@@ -156,6 +183,7 @@ public abstract class ListStudySessionFragment extends Fragment implements
 
         startActivity(Intent.createChooser(emailIntent, "Select Email Sending App:"));
 
+        studySession.setSent(true);
     }
 
 

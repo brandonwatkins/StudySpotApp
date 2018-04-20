@@ -290,11 +290,6 @@ public class MainActivity extends AppCompatActivity
         //Get reference to the apps database
         database = StudySpotDb.getDatabase(this);
 
-        StudySession s = new StudySession(System.currentTimeMillis());
-        Log.d(TAG, "Create NEW StudySession");
-        new StartStudySessionTask(database).execute(s);
-        new EndMostRecentStudySessionTask(database).execute();
-
         // TODO set base to total session length for all sessions this week
         try {
             long weeklyTotal = new GetWeeklyTotalStudySessionTask(database).execute().get();
@@ -1271,6 +1266,7 @@ public class MainActivity extends AppCompatActivity
             if (geofenceTransition.equals("EXIT")) {
                 timeWhenStopped = mCurrentSessionChrono.getBase() - SystemClock.elapsedRealtime();
                 mCurrentSessionChrono.stop();
+                mWeeklySessionTotalChrono.stop();
                 Log.d(TAG, "Stop Chronometer!");
                 //TODO create the StudySession and save it to the database
 

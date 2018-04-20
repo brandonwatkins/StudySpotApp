@@ -1,8 +1,5 @@
 package com.example.android.studyspotapp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Environment;
 import android.util.Log;
 
@@ -14,14 +11,11 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 public class pdfUtils {
     //write method takes two parameter pdf name and content
@@ -31,7 +25,7 @@ public class pdfUtils {
     boolean mExternalStorageWriteable = false;
     String state = Environment.getExternalStorageState();
 
-    public void write(String fname, String hoursRemaining, String totalHours, Boolean hadEnoughHours) {
+    public void write(String fname, String totalHoursRemaining, String totalHoursCompleted, Boolean hadEnoughHours) {
 
         //Check if the permissions
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -79,11 +73,11 @@ public class pdfUtils {
                 title.setFont(bfBold18);
                 document.add(title);
 
-                Paragraph totalHoursRecorded = new Paragraph("Total Hours Recorded: " + totalHours);
+                Paragraph totalHoursRecorded = new Paragraph("Total Hours Recorded: " + totalHoursCompleted);
                 title.setFont(bf12);
                 document.add(totalHoursRecorded);
 
-                Paragraph HoursRemaining = new Paragraph("Hours Remaining: " + hoursRemaining);
+                Paragraph HoursRemaining = new Paragraph("Hours Remaining: " + totalHoursRemaining);
                 title.setFont(bf12);
                 document.add(HoursRemaining);
 
