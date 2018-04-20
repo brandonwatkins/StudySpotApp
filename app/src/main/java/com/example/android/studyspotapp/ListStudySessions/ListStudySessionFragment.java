@@ -18,7 +18,9 @@ import com.example.android.studyspotapp.R;
 import com.example.android.studyspotapp.pdfUtils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Fragment to list all of the study sessions
@@ -117,16 +119,25 @@ public abstract class ListStudySessionFragment extends Fragment implements
                 Snackbar.LENGTH_LONG)
                 .show();
 
+        Date date = new Date();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+
+        String fileName = "StudySpot_" + timeStamp + ".pdf";
+
         //new SimplePdf().createPdf(DEST);
-        new pdfUtils().write("test", "null");
+        new pdfUtils().write(fileName, "null", "null", true);
 
         //studySession.setSent(true);
 
         String TO, SUBJECT, MESSAGE;
 
-        String filename="test.pdf";
-        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
-        Uri path = Uri.fromFile(filelocation);
+//        File fileLocation = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_DOCUMENTS) + "StudySpotPDF" + fileName);
+
+        File fileLocation = new File("/storage/emulated/0/Documents/StudySpotPDF/" + fileName);
+
+
+        Uri path = Uri.fromFile(fileLocation);
 
         Intent emailIntent;
 
@@ -138,12 +149,13 @@ public abstract class ListStudySessionFragment extends Fragment implements
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
         emailIntent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
-        // the attachment
+        // The attachment
         emailIntent.putExtra(Intent.EXTRA_STREAM, path);
 
         emailIntent.setType("message/rfc822");
 
         startActivity(Intent.createChooser(emailIntent, "Select Email Sending App:"));
+
     }
 
 
