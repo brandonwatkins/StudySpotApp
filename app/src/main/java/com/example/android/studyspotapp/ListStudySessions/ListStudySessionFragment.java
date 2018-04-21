@@ -90,7 +90,7 @@ public abstract class ListStudySessionFragment extends Fragment implements
                         Snackbar deleteAndUndo = Snackbar.make(
                                 ListStudySessionFragment.this.getActivity().findViewById(R.id.fab),
                                 "Deleting session",
-                                Snackbar.LENGTH_SHORT);
+                                Snackbar.LENGTH_LONG);
                         deleteAndUndo.setAction(R.string.undo_string, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -115,90 +115,12 @@ public abstract class ListStudySessionFragment extends Fragment implements
 
     @Override
     public void onClick(View view) {
-        StudySession studySession = (StudySession) view.getTag();
-
+//        StudySession studySession = (StudySession) view.getTag();
+//
 //        Snackbar.make(this.mView, studySession.toString(),
-//                Snackbar.LENGTH_SHORT)
+//                Snackbar.LENGTH_LONG)
 //                .show();
-
-        Snackbar.make(this.mView, studySession.toString(),
-                Snackbar.LENGTH_LONG)
-                .show();
-
-        Date date = new Date();
-        String timeStamp = new SimpleDateFormat("MM-dd-yyyy").format(date);
-
-        String fileName = "StudySpot_" + timeStamp + ".pdf";
-
-        long weeklyTotal;
-        long hoursRemaining;
-        boolean hadEnoughHours = true;
-
-        try {
-            String totalHoursCompleted;
-            String totalHoursRemaining;
-
-            weeklyTotal = new GetWeeklyTotalStudySessionTask(StudySpotDb.getDatabase(view.getContext())).execute().get();
-            totalHoursCompleted = String.format("%02d:%02d:%02d",
-                    TimeUnit.MILLISECONDS.toHours(weeklyTotal),
-                    TimeUnit.MILLISECONDS.toMinutes(weeklyTotal) -
-                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(weeklyTotal)),
-                    TimeUnit.MILLISECONDS.toSeconds(weeklyTotal) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(weeklyTotal)));
-
-            hoursRemaining = 28800000 - weeklyTotal;
-
-            //Student-athlete does NOT have enough hours
-            if (hoursRemaining > 0) {
-                hadEnoughHours = false;
-            } else { //Student-athlete has EXTRA hours
-                long totalExtraHours = Math.abs(hoursRemaining);
-                hoursRemaining = totalExtraHours;
-            }
-
-            totalHoursRemaining = String.format("%02d:%02d:%02d",
-                    TimeUnit.MILLISECONDS.toHours(hoursRemaining),
-                    TimeUnit.MILLISECONDS.toMinutes(hoursRemaining) -
-                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(hoursRemaining)),
-                    TimeUnit.MILLISECONDS.toSeconds(hoursRemaining) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursRemaining)));
-
-            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours);
-
-        } catch (InterruptedException i) {
-            i.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        String TO, SUBJECT, MESSAGE;
-
-//        File fileLocation = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_DOCUMENTS) + "StudySpotPDF" + fileName);
-
-        File fileLocation = new File("/storage/emulated/0/Documents/StudySpotPDF/" + fileName);
-
-
-        Uri path = Uri.fromFile(fileLocation);
-
-        Intent emailIntent;
-
-        SUBJECT = "StudySpot Weekly Report";
-        MESSAGE = "Test Message";
-        TO = "brandonwatkinsnz@gmail.com";
-        emailIntent = new Intent(Intent.ACTION_SEND);
-
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
-        // The attachment
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-
-        emailIntent.setType("message/rfc822");
-
-        startActivity(Intent.createChooser(emailIntent, "Select Email Sending App:"));
-
-        studySession.setSent(true);
+//
     }
 
 

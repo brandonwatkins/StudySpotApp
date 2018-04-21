@@ -938,23 +938,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * The code below initilizes Google Maps and sets up the callbacks for onMapReady, onMapClick
      * and onMarkerClick.
