@@ -6,6 +6,7 @@ import android.util.Log;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -13,54 +14,107 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.OutputStream;
+
 
 public class pdfUtils {
     //write method takes two parameter pdf name and content
     //return true if pdf successfully created
-    public Boolean write(String fname, String fcontent) {
-        try {
-            //Create file path for Pdf
-            //String fpath = "sdcard/" + fname + ".pdf";
 
-            Date date = new Date() ;
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+    boolean mExternalStorageAvailable = false;
+    boolean mExternalStorageWriteable = false;
+    String state = Environment.getExternalStorageState();
 
-            String extStorage = Environment.getExternalStorageState();
-            String path = extStorage + "/Android/data/com.example.android.studyspotapp/" + fname + ": " + timeStamp + ".pdf";
+    public void write(String fname, String totalHoursRemaining, String totalHoursCompleted, Boolean hadEnoughHours) {
 
-            File file = new File(path);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            // To customise the text of the pdf
-            // we can use FontFamily
-            Font bfBold12 = new Font(Font.FontFamily.TIMES_ROMAN,
-                    12, Font.BOLD, new BaseColor(0, 0, 0));
-            Font bf12 = new Font(Font.FontFamily.TIMES_ROMAN,
-                    12);
-            // create an instance of itext document
-            Document document = new Document();
-            PdfWriter.getInstance(document,
-                    new FileOutputStream(file.getAbsoluteFile()));
-            document.open();
-            //using add method in document to insert a paragraph
-            document.add(new Paragraph("My First Pdf !"));
-            document.add(new Paragraph("Hello World"));
-            // close document
-            document.close();
-            Log.d("PDFUTILS", "PDF created");
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("PDFUTILS", "PDF NOT created (IOException)");
-
-            return false;
-        } catch (DocumentException e) {
-            e.printStackTrace();
-            Log.d("PDFUTILS", "PDF created (DocumentException)");
-            return false;
+        //Check if the permissions
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // We can read and write the media
+            mExternalStorageAvailable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            // We can only read the media
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            // Something else is wrong. It may be one of many other states, but all we need
+            //  to know is we can neither read nor write
+            mExternalStorageAvailable = mExternalStorageWriteable = false;
         }
+
+        if (mExternalStorageWriteable == true && mExternalStorageAvailable == true) {
+
+            try {
+                //Creates folder for PDF's
+                File StudySpotFolder = new File(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DOCUMENTS), "StudySpotPDF");
+                if (!StudySpotFolder.exists()) {
+                    StudySpotFolder.mkdir();
+                    Log.i("PDFUTILS", "Pdf Directory created");
+                }
+
+                File myPDF = new File(StudySpotFolder + "/" + fname);
+
+                OutputStream output = new FileOutputStream(myPDF);
+
+                //Create an instance of iText document
+                Document document = new Document();
+
+                PdfWriter.getInstance(document, output);
+
+                document.open();
+
+                //Customise the text of the pdf
+                Font bfBold18 = new Font(Font.FontFamily.TIMES_ROMAN,18, Font.BOLD, new BaseColor(0, 0, 0));
+                Font bf12 = new Font(Font.FontFamily.TIMES_ROMAN, 12);
+
+                // Adds title
+                Paragraph title = new Paragraph("StudySpot Weekly Report");
+                title.setAlignment(Element.ALIGN_CENTER);
+                title.setFont(bfBold18);
+                document.add(title);
+
+                Paragraph totalHoursRecorded = new Paragraph("Total Hours Recorded: " + totalHoursCompleted);
+                title.setFont(bf12);
+                document.add(totalHoursRecorded);
+
+                if (hadEnoughHours == true) {
+                    Paragraph HoursRemaining = new Paragraph("Extra Hours Completed: " + totalHoursRemaining);
+                    title.setFont(bf12);
+                    document.add(HoursRemaining);
+                } else {
+                    Paragraph HoursRemaining = new Paragraph("Hours Remaining: " + totalHoursRemaining);
+                    title.setFont(bf12);
+                    document.add(HoursRemaining);
+                }
+
+
+                String enoughHours;
+
+                if (hadEnoughHours == true) {
+                    enoughHours = "YES";
+                } else {
+                    enoughHours = "NO";
+                }
+
+                Paragraph completedStudyHall = new Paragraph("Completed Study Hall for this week: " + enoughHours);
+                title.setFont(bf12);
+                document.add(completedStudyHall);
+
+                // close document
+                document.close();
+                Log.d("PDFUTILS", "PDF created");
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d("PDFUTILS", "PDF NOT created (IOException)");
+                return;
+            } catch (DocumentException e) {
+                e.printStackTrace();
+                Log.d("PDFUTILS", "PDF created (DocumentException)");
+                return;
+            }
+        }
+
     }
 }
+

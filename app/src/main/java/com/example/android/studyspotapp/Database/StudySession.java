@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by brandonwatkins on 13/02/18.
@@ -63,29 +64,26 @@ public class StudySession {
     }
 
     public String getStudySessionDisplay(int sessionLength) {
-        /*int length = sessionLength;
-        length /= 1000;
-        int min = length / 60;
-        length %= 60;
 
-        return Integer.toString(length);*/
-
-        /*int seconds = sessionLength / 1000;
-        int minutes = seconds / 60;
-        seconds = seconds % 60;
-        int hours = minutes / 60;
-        minutes = minutes % 60;
-
-        return (hours + ":" + minutes + ":" + seconds);*/
-
-        Date time = new Date(sessionLength);
-        DateFormat format = new SimpleDateFormat("HH:mm:ss");
-        String timeFormattedDate = format.format(time);
-
-        return timeFormattedDate;
+//        int seconds, minutes, hours;
+//        seconds = sessionLength / 1000;
+//        minutes = seconds / 60;
+//        seconds = seconds % 60;
+//        hours = minutes / 60;
+//        minutes = minutes % 60;
+//
+//        return (hh + ":" + mm + ":" + ss);
 
 
 
+        //hh:mm:ss
+        String formattedTime = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(sessionLength),
+                TimeUnit.MILLISECONDS.toMinutes(sessionLength) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(sessionLength)),
+                TimeUnit.MILLISECONDS.toSeconds(sessionLength) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(sessionLength)));
+        return formattedTime;
     }
 
     public void setSessionLength(int sessionLength) {
