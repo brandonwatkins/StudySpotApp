@@ -77,9 +77,16 @@ public class pdfUtils {
                 title.setFont(bf12);
                 document.add(totalHoursRecorded);
 
-                Paragraph HoursRemaining = new Paragraph("Hours Remaining: " + totalHoursRemaining);
-                title.setFont(bf12);
-                document.add(HoursRemaining);
+                if (hadEnoughHours == true) {
+                    Paragraph HoursRemaining = new Paragraph("Extra Hours Completed: " + totalHoursRemaining);
+                    title.setFont(bf12);
+                    document.add(HoursRemaining);
+                } else {
+                    Paragraph HoursRemaining = new Paragraph("Hours Remaining: " + totalHoursRemaining);
+                    title.setFont(bf12);
+                    document.add(HoursRemaining);
+                }
+
 
                 String enoughHours;
 

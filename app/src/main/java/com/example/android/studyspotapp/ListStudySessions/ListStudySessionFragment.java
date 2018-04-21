@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Fragment to list all of the study sessions
@@ -134,19 +135,33 @@ public abstract class ListStudySessionFragment extends Fragment implements
         boolean hadEnoughHours = true;
 
         try {
+            String totalHoursCompleted;
+            String totalHoursRemaining;
+
             weeklyTotal = new GetWeeklyTotalStudySessionTask(StudySpotDb.getDatabase(view.getContext())).execute().get();
-            Date time = new Date(weeklyTotal);
-            DateFormat format = new SimpleDateFormat("HH:mm:ss");
-            String totalHoursCompleted = format.format(time);
+            totalHoursCompleted = String.format("%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(weeklyTotal),
+                    TimeUnit.MILLISECONDS.toMinutes(weeklyTotal) -
+                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(weeklyTotal)),
+                    TimeUnit.MILLISECONDS.toSeconds(weeklyTotal) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(weeklyTotal)));
 
-            hoursRemaining = 28800 - weeklyTotal;
+            hoursRemaining = 28800000 - weeklyTotal;
 
-            if (hoursRemaining >= 0) {
+            //Student-athlete does NOT have enough hours
+            if (hoursRemaining > 0) {
                 hadEnoughHours = false;
+            } else { //Student-athlete has EXTRA hours
+                long totalExtraHours = Math.abs(hoursRemaining);
+                hoursRemaining = totalExtraHours;
             }
 
-            Date time2 = new Date(hoursRemaining);
-            String totalHoursRemaining = format.format(time2);
+            totalHoursRemaining = String.format("%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(hoursRemaining),
+                    TimeUnit.MILLISECONDS.toMinutes(hoursRemaining) -
+                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(hoursRemaining)),
+                    TimeUnit.MILLISECONDS.toSeconds(hoursRemaining) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursRemaining)));
 
             new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours);
 

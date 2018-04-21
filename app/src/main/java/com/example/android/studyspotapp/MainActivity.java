@@ -290,6 +290,12 @@ public class MainActivity extends AppCompatActivity
         //Get reference to the apps database
         database = StudySpotDb.getDatabase(this);
 
+        StudySession s = new StudySession(System.currentTimeMillis());
+        s.setSessionLength(10800000);
+        Log.d(TAG, "Create NEW StudySession");
+        new StartStudySessionTask(database).execute(s);
+
+
         // TODO set base to total session length for all sessions this week
         try {
             long weeklyTotal = new GetWeeklyTotalStudySessionTask(database).execute().get();
