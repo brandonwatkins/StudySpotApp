@@ -42,6 +42,7 @@ import com.example.android.studyspotapp.Database.Tasks.EndMostRecentStudySession
 import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.StartStudySessionTask;
 import com.example.android.studyspotapp.Settings.SettingsActivity;
+import com.example.android.studyspotapp.Utils.sendHoursUtils;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -404,8 +405,11 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Sending this weeks hours...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                new sendHoursUtils().sendHours(view, "brandonwatkinsnz@gmail.com");
+
             }
         });
     }

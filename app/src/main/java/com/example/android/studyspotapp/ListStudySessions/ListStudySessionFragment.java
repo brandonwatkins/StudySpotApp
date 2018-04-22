@@ -2,10 +2,7 @@ package com.example.android.studyspotapp.ListStudySessions;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,19 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.android.studyspotapp.Database.StudySession;
-import com.example.android.studyspotapp.Database.StudySpotDb;
-import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
-import com.example.android.studyspotapp.MainActivity;
 import com.example.android.studyspotapp.R;
-import com.example.android.studyspotapp.pdfUtils;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Fragment to list all of the study sessions
