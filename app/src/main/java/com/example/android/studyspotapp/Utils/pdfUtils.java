@@ -1,4 +1,4 @@
-package com.example.android.studyspotapp;
+package com.example.android.studyspotapp.Utils;
 
 import android.os.Environment;
 import android.util.Log;

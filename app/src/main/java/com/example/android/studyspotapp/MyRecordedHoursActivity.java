@@ -20,10 +20,9 @@ import android.view.View;
 import com.example.android.studyspotapp.Database.StudySpotDb;
 import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
 import com.example.android.studyspotapp.ListStudySessions.ListOverallStudySessionFragment;
-import com.example.android.studyspotapp.ListStudySessions.ListStudySessionFragment;
 import com.example.android.studyspotapp.ListStudySessions.ListThisWeekStudySessionFragment;
-import com.example.android.studyspotapp.Tabs.TabAllSessions;
-import com.example.android.studyspotapp.Tabs.TabThisWeek;
+import com.example.android.studyspotapp.Utils.pdfUtils;
+import com.example.android.studyspotapp.Utils.sendHoursUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -75,74 +74,7 @@ public class MyRecordedHoursActivity extends AppCompatActivity {
                 Snackbar.make(view, "Sending Recorded Hours...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                Date date = new Date();
-                String timeStamp = new SimpleDateFormat("MM-dd-yyyy").format(date);
-
-                String fileName = "StudySpot_" + timeStamp + ".pdf";
-
-                long weeklyTotal;
-                long hoursRemaining;
-                boolean hadEnoughHours = true;
-
-                try {
-                    String totalHoursCompleted;
-                    String totalHoursRemaining;
-
-                    weeklyTotal = new GetWeeklyTotalStudySessionTask(StudySpotDb.getDatabase(view.getContext())).execute().get();
-                    totalHoursCompleted = String.format("%02d:%02d:%02d",
-                            TimeUnit.MILLISECONDS.toHours(weeklyTotal),
-                            TimeUnit.MILLISECONDS.toMinutes(weeklyTotal) -
-                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(weeklyTotal)),
-                            TimeUnit.MILLISECONDS.toSeconds(weeklyTotal) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(weeklyTotal)));
-
-                    hoursRemaining = 28800000 - weeklyTotal;
-
-                    //Student-athlete does NOT have enough hours
-                    if (hoursRemaining > 0) {
-                        hadEnoughHours = false;
-                    } else { //Student-athlete has EXTRA hours
-                        long totalExtraHours = Math.abs(hoursRemaining);
-                        hoursRemaining = totalExtraHours;
-                    }
-
-                    totalHoursRemaining = String.format("%02d:%02d:%02d",
-                            TimeUnit.MILLISECONDS.toHours(hoursRemaining),
-                            TimeUnit.MILLISECONDS.toMinutes(hoursRemaining) -
-                                    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(hoursRemaining)),
-                            TimeUnit.MILLISECONDS.toSeconds(hoursRemaining) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursRemaining)));
-
-                    new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours);
-
-                } catch (InterruptedException i) {
-                    i.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-
-                String TO, SUBJECT, MESSAGE;
-
-                File fileLocation = new File("/storage/emulated/0/Documents/StudySpotPDF/" + fileName);
-
-                Uri path = Uri.fromFile(fileLocation);
-
-                Intent emailIntent;
-
-                SUBJECT = "StudySpot Weekly Report";
-                MESSAGE = "Test Message";
-                TO = "brandonwatkinsnz@gmail.com";
-                emailIntent = new Intent(Intent.ACTION_SEND);
-
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
-                emailIntent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
-                // The attachment
-                emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-
-                emailIntent.setType("message/rfc822");
-
-                startActivity(Intent.createChooser(emailIntent, "Select Email Sending App:"));
+                new sendHoursUtils().sendHours(view, "brandonwatkinsnz@gmail.com");
 
             }
         });
