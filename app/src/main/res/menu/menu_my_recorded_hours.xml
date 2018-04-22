@@ -2,9 +2,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.studyspotapp.MyRecordedHoursActivity">
+
+    <item
+        android:id="@+id/action_send_hours"
+        android:orderInCategory="100"
+        android:title="@string/menu_send_hours"
+        app:showAsAction="never">
+
+        <!-- "file" submenu -->
+        <menu>
+            <item android:id="@+id/coach_finora"
+                android:title="@string/menu_coach_finora" />
+            <item android:id="@+id/coach_white"
+                android:title="@string/menu_coach_white" />
+            <item android:id="@+id/coach_biggerstaff"
+                android:title="@string/menu_coach_biggerstaff" />
+        </menu>
+
+    </item>
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
 </menu>
