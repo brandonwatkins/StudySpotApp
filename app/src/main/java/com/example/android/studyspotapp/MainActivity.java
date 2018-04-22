@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
             UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
-    // Keys for storing activity state in the Bundle.
+    //Keys for storing activity state in the Bundle.
     private final static String KEY_REQUESTING_LOCATION_UPDATES = "requesting-location-updates";
     private final static String KEY_LOCATION = "location";
     private static final String KEY_CAMERA_POSITION = "camera_position";
@@ -179,7 +179,9 @@ public class MainActivity extends AppCompatActivity
     private UiSettings  mUiSettings;
     private Circle      geoFenceLimits;
 
-    // TODO find a way to access renfroLibray lat & lang from Constants file. This is not good!
+    /**
+     * Location of the geofence I created
+     */
     private LatLng renfroLibrary = new LatLng(35.827454, -82.551807);
 
     @Override
@@ -225,8 +227,6 @@ public class MainActivity extends AppCompatActivity
     private long timeWhenStopped = 0;
 
     StudySpotDb database;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1011,6 +1011,7 @@ public class MainActivity extends AppCompatActivity
     /** Called when the user taps the Show StudySpot button */
     public void showStudySpot(View view) {
        // TODO Add functionality to button
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(renfroLibrary, 18f));
     }
 
     /****************************************************************************************
