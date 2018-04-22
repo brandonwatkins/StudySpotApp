@@ -59,7 +59,11 @@ public class pdfUtils {
                 //Create an instance of iText document
                 Document document = new Document();
 
-                PdfWriter.getInstance(document, output);
+                PdfWriter writer = PdfWriter.getInstance(document, output);
+
+                //Encrypted PDF with a password the coaches will have. Password right now if for testing
+                writer.setEncryption("password1".getBytes(), "password2".getBytes(), PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_40);
+                writer.createXmpMetadata();
 
                 document.open();
 
