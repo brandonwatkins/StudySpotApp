@@ -229,6 +229,8 @@ public class MainActivity extends AppCompatActivity
 
     StudySpotDb database;
 
+    String defaultCoach;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -291,10 +293,10 @@ public class MainActivity extends AppCompatActivity
         //Get reference to the apps database
         database = StudySpotDb.getDatabase(this);
 
-        StudySession s = new StudySession(System.currentTimeMillis());
+        /*StudySession s = new StudySession(System.currentTimeMillis());
         s.setSessionLength(10800000);
         Log.d(TAG, "Create NEW StudySession");
-        new StartStudySessionTask(database).execute(s);
+        new StartStudySessionTask(database).execute(s);*/
 
 
         // TODO set base to total session length for all sessions this week
@@ -342,8 +344,8 @@ public class MainActivity extends AppCompatActivity
         //mVisualizerView.setShowBass(sharedPreferences.getBoolean(getString(R.string.pref_show_bass_key),
                 //getResources().getBoolean(R.bool.pref_show_bass_default)));
         // TODO Setup the Default coach for FAB button
-        //mVisualizerView.setShowBass(sharedPreferences.getBoolean(getString(R.string.pref_show_bass_key),
-                //getResources().getBoolean(R.bool.pref_show_bass_default)));
+        defaultCoach = (sharedPreferences.getString(getString(R.string.pref_coach_key),
+                getResources().getString(R.string.pref_coach_default)));
 
         // Register the listener
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -361,6 +363,7 @@ public class MainActivity extends AppCompatActivity
         } else if (key.equals(getString(R.string.pref_coach_key))) {
             // TODO Set the default coach for the FAB button
             // mVisualizerView.setShowMid(sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_show_mid_range_default)));
+            defaultCoach = (sharedPreferences.getString(key, getResources().getString(R.string.pref_coach_default)));
         }
     }
 
@@ -383,7 +386,9 @@ public class MainActivity extends AppCompatActivity
                 new sendHoursUtils().sendHoursContext(this, getString(R.string.email_coach_biggerstaff));
                 return true;
             case R.id.action_my_recorded_hours:
-                startActivity(new Intent(this, MyRecordedHoursActivity.class));
+                Intent recordedHoursIntent = new Intent(this, MyRecordedHoursActivity.class);
+                recordedHoursIntent.putExtra("defaultCoachKey", defaultCoach);
+                startActivity(recordedHoursIntent);
                 return true;
             case R.id.action_settings:
                 Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
@@ -404,7 +409,7 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(view, "Sending this weeks hours...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                new sendHoursUtils().sendHours(view, getString(R.string.email_coach_finora));
+                new sendHoursUtils().sendHours(view, defaultCoach);
 
             }
         });

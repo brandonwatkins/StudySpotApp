@@ -99,9 +99,9 @@
     <string name="email_coach_biggerstaff">abiggerstaff@mhu.edu</string>
 
     <!-- Value in SharedPreferences for different coaches -->
-    <string name="pref_coach_finora" translatable="false">finora</string>
-    <string name="pref_coach_white" translatable="false">white</string>
-    <string name="pref_coach_biggerstaff" translatable="false">biggerstaff</string>
+    <string name="pref_coach_finora" translatable="false">vfinora@mhu.edu</string>
+    <string name="pref_coach_white" translatable="false">wwhite@mhu.edu</string>
+    <string name="pref_coach_biggerstaff" translatable="false">abiggerstaff@mhu.edu</string>
 
     <!-- Label for Do Not Disturb checkbox -->
     <string name="pref_disturb_label">Do Not Disturb</string>
