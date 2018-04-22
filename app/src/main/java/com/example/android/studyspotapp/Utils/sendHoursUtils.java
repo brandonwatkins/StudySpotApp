@@ -72,10 +72,10 @@ public class sendHoursUtils {
 
         SUBJECT = "StudySpot Weekly Report";
         MESSAGE = "The attachment below contains this weeks study hall hours";
-        //TO = "brandonwatkinsnz@gmail.com";
+        TO = sendTo;
         emailIntent = new Intent(Intent.ACTION_SEND);
 
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, sendTo);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, SUBJECT);
         emailIntent.putExtra(Intent.EXTRA_TEXT, MESSAGE);
         // The attachment
