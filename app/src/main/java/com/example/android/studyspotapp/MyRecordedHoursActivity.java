@@ -74,7 +74,7 @@ public class MyRecordedHoursActivity extends AppCompatActivity {
                 Snackbar.make(view, "Sending Recorded Hours...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                new sendHoursUtils().sendHours(view, "brandonwatkinsnz@gmail.com");
+                new sendHoursUtils().sendHours(view, getString(R.string.email_coach_finora));
 
             }
         });

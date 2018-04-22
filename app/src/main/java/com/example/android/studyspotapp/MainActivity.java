@@ -365,7 +365,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
@@ -375,19 +374,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.coach_finora:
-                //startActivity(new Intent(this, About.class));
+                new sendHoursUtils().sendHoursContext(this, getString(R.string.email_coach_finora));
                 return true;
             case R.id.coach_white:
-                //startActivity(new Intent(this, Help.class));
+                new sendHoursUtils().sendHoursContext(this, getString(R.string.email_coach_white));
                 return true;
             case R.id.coach_biggerstaff:
-                //startActivity(new Intent(this, Help.class));
+                new sendHoursUtils().sendHoursContext(this, getString(R.string.email_coach_biggerstaff));
                 return true;
             case R.id.action_my_recorded_hours:
                 startActivity(new Intent(this, MyRecordedHoursActivity.class));
-                return true;
-            case R.id.action_show_studySpot:
-                //startActivity(new Intent(this, Help.class));
                 return true;
             case R.id.action_settings:
                 Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
@@ -408,7 +404,7 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(view, "Sending this weeks hours...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                new sendHoursUtils().sendHours(view, "brandonwatkinsnz@gmail.com");
+                new sendHoursUtils().sendHours(view, getString(R.string.email_coach_finora));
 
             }
         });
