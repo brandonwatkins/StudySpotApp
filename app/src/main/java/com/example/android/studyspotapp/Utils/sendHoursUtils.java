@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.example.android.studyspotapp.Database.StudySpotDb;
 import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
+import com.example.android.studyspotapp.Database.Tasks.UpdateStudySessionSentTask;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -158,5 +159,9 @@ public class sendHoursUtils {
         emailIntent.setType("message/rfc822");
 
         mView.getContext().startActivity(Intent.createChooser(emailIntent, "Select Email Sending App:"));
+
+        // TODO Instead of startActivity... startActivity for result so see if email sent
+
+        new UpdateStudySessionSentTask(StudySpotDb.getDatabase(mView.getContext())).execute();
     }
 }

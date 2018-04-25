@@ -39,7 +39,7 @@ public interface StudySpotDao {
     @Query ("SELECT * FROM StudySession WHERE sessionLength=0 ORDER BY id DESC LIMIT 1")
     StudySession getMostRecentSession();
 
-    @Query ("SELECT SUM(sessionLength) FROM StudySession")
+    @Query ("SELECT SUM(sessionLength) FROM StudySession WHERE sent=0")
     long getTotalWeeklyHours();
 
     @Query ("DELETE FROM StudySession WHERE sessionLength=0")
@@ -48,4 +48,6 @@ public interface StudySpotDao {
     @Delete
     void deleteStudySession(StudySession studySession);
 
+    @Query("UPDATE StudySession SET sent=1 WHERE sent=0")
+    void updateStudySessionSent();
 }
