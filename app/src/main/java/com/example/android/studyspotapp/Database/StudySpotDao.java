@@ -48,4 +48,6 @@ public interface StudySpotDao {
     @Delete
     void deleteStudySession(StudySession studySession);
 
+    @Query("UPDATE StudySession SET sent=1 WHERE sent=0")
+    void updateStudySessionSent();
 }
