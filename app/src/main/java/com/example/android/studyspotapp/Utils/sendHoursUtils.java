@@ -55,7 +55,7 @@ public class sendHoursUtils {
                     TimeUnit.MILLISECONDS.toSeconds(hoursRemaining) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursRemaining)));
 
-            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours);
+            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext);
 
         } catch (InterruptedException i) {
             i.printStackTrace();
@@ -128,7 +128,9 @@ public class sendHoursUtils {
                     TimeUnit.MILLISECONDS.toSeconds(hoursRemaining) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursRemaining)));
 
-            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours);
+            Context mContext = mView.getContext();
+
+            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext);
 
         } catch (InterruptedException i) {
             i.printStackTrace();
