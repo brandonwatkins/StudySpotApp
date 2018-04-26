@@ -60,7 +60,7 @@ public class sendHoursUtils {
                     TimeUnit.MILLISECONDS.toSeconds(hoursRemaining) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursRemaining)));
 
-            sessionList = new GetListOfThisWeeksStudySessionsTask(StudySpotDb.getDatabase(mContext)).execute();
+            sessionList = new GetListOfThisWeeksStudySessionsTask(StudySpotDb.getDatabase(mContext)).execute().get();
 
             new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext, sessionList);
 
@@ -105,6 +105,7 @@ public class sendHoursUtils {
         long weeklyTotal;
         long hoursRemaining;
         boolean hadEnoughHours = true;
+        List<StudySession> sessionList;
 
         try {
             String totalHoursCompleted;
@@ -137,7 +138,9 @@ public class sendHoursUtils {
 
             Context mContext = mView.getContext();
 
-            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext);
+            sessionList = new GetListOfThisWeeksStudySessionsTask(StudySpotDb.getDatabase(mContext)).execute().get();
+
+            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext, sessionList);
 
         } catch (InterruptedException i) {
             i.printStackTrace();

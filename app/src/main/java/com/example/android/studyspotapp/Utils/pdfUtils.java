@@ -82,7 +82,7 @@ public class pdfUtils {
 
                 document.open();
 
-                addLogo(document, mContext);
+                //addLogo(document, mContext);
 
                 //Customise the text of the pdf
                 float headingFontSize = 18f;
@@ -91,23 +91,23 @@ public class pdfUtils {
 
                 // Adds title
                 Paragraph title = new Paragraph(new Phrase(lineSpacing,"StudySpot Weekly Report",
-                        FontFactory.getFont(FontFactory.TIMES_BOLD, headingFontSize)));
+                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, headingFontSize)));
                 title.setAlignment(Element.ALIGN_CENTER);
                 title.setPaddingTop(30f);
                 document.add(title);
 
                 // Adds subsection
-                Paragraph totalHoursRecorded = new Paragraph(new Phrase(lineSpacing,"Total Hours Recorded: " + totalHoursCompleted,
-                        FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                Paragraph totalHoursRecorded = new Paragraph(new Phrase(lineSpacing,"\n" + "Total Hours Recorded: " + totalHoursCompleted,
+                        FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                 document.add(totalHoursRecorded);
 
                 if (hadEnoughHours == true) {
                     Paragraph HoursRemaining = new Paragraph(new Phrase(lineSpacing,"Extra Hours Completed: " + totalHoursRemaining,
-                            FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                            FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                     document.add(HoursRemaining);
                 } else {
                     Paragraph HoursRemaining = new Paragraph(new Phrase(lineSpacing,"Hours Remaining: " + totalHoursRemaining,
-                            FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                            FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                     document.add(HoursRemaining);
                 }
 
@@ -121,13 +121,18 @@ public class pdfUtils {
                 }
 
                 Paragraph completedStudyHall = new Paragraph(new Phrase(lineSpacing,"Completed Study Hall for this week: " + enoughHours,
-                        FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                        FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                 document.add(completedStudyHall);
+
+                // Adds Weekly session title
+                Paragraph weeklySessionTitle = new Paragraph(new Phrase(lineSpacing,"\n" + "This weeks recorded sessions:",
+                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, subsectionFontSize)));
+                document.add(weeklySessionTitle);
 
                 String sessionListString = convertSessionList(sessionList);
 
-                Paragraph sessionListP = new Paragraph(new Phrase(lineSpacing, sessionListString,
-                        FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                Paragraph sessionListP = new Paragraph(new Phrase(lineSpacing, "\n" + sessionListString,
+                        FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
 
                 document.add(sessionListP);
 
@@ -195,7 +200,7 @@ public class pdfUtils {
         for (String s : studySessionStringArray)
         {
             sb.append(s);
-            sb.append("\n");
+            sb.append("\n\n");
         }
 
         return sb.toString();

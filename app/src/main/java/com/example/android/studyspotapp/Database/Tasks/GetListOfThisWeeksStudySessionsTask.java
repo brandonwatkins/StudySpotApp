@@ -11,20 +11,25 @@ import java.util.List;
  * Created by Brandon Watkins
  */
 
-public class GetListOfThisWeeksStudySessionsTask extends AsyncTask<Void, Void, List> {
+public class GetListOfThisWeeksStudySessionsTask extends AsyncTask<Void, Void, List<StudySession>> {
     private StudySpotDb studySpotDb;
+
+    List<StudySession> sessionList;
 
     public GetListOfThisWeeksStudySessionsTask(StudySpotDb studySpotDb) {
         this.studySpotDb = studySpotDb;
     }
 
     @Override
-    protected List doInBackground(Void... params) {
-        List<StudySession> weeklySessions;
-        weeklySessions = studySpotDb.studySpotDao().getListOfThisWeeksStudySessions();
-        return weeklySessions;
+    protected List<StudySession> doInBackground(Void... arg0) {
+        sessionList = studySpotDb.studySpotDao().getListOfThisWeeksStudySessions();
+        return sessionList;
     }
 
 
+    @Override
+    protected void onPostExecute(List<StudySession> studyList) {
+        super.onPostExecute(studyList);
 
+    }
 }
