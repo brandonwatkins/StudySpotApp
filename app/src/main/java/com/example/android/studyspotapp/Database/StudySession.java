@@ -96,7 +96,7 @@ public class StudySession {
 
     public String toString() {
         String session = "";
-        session = "Your recorded study session was " + getSessionLength() + "minutes long";
+        session = "Date: " + getDateAndTime() +  "Session Length: " + getStudySessionDisplay(getSessionLength());
 
         return session;
     }
