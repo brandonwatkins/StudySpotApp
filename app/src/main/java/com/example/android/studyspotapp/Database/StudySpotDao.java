@@ -27,6 +27,9 @@ public interface StudySpotDao {
     @Query("SELECT * FROM StudySession WHERE sent=0 ORDER BY dateAndTime")
     LiveData<List<StudySession>> getThisWeeksStudySessions();
 
+    @Query("SELECT * FROM StudySession WHERE sent=0 ORDER BY dateAndTime")
+    List<StudySession> getListOfThisWeeksStudySessions();
+
     @Insert (onConflict = REPLACE)
     void addStudySession(StudySession studySession);
 

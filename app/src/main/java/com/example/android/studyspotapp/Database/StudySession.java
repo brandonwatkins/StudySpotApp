@@ -86,6 +86,15 @@ public class StudySession {
         return formattedTime;
     }
 
+    public String getStudySessionDateDisplay(long dateAndTime) {
+        Date date = new Date(dateAndTime);
+        DateFormat format = new SimpleDateFormat("EEE, MMM d yyyy");
+        format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+        String formattedDate = format.format(date);
+
+        return formattedDate;
+    }
+
     public void setSessionLength(int sessionLength) {
         this.sessionLength = sessionLength;
     }
@@ -96,7 +105,7 @@ public class StudySession {
 
     public String toString() {
         String session = "";
-        session = "Your recorded study session was " + getSessionLength() + "minutes long";
+        session = "Date: " + getStudySessionDateDisplay(getDateAndTime()) + "\n" + "Session Length: " + getStudySessionDisplay(getSessionLength());
 
         return session;
     }

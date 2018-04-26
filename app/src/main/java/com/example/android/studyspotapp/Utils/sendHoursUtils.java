@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
+import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.Database.StudySpotDb;
+import com.example.android.studyspotapp.Database.Tasks.GetListOfThisWeeksStudySessionsTask;
 import com.example.android.studyspotapp.Database.Tasks.GetWeeklyTotalStudySessionTask;
 import com.example.android.studyspotapp.Database.Tasks.UpdateStudySessionSentTask;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +29,7 @@ public class sendHoursUtils {
         long weeklyTotal;
         long hoursRemaining;
         boolean hadEnoughHours = true;
+        List<StudySession> sessionList;
 
         try {
             String totalHoursCompleted;
@@ -56,7 +60,9 @@ public class sendHoursUtils {
                     TimeUnit.MILLISECONDS.toSeconds(hoursRemaining) -
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(hoursRemaining)));
 
-            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext);
+            sessionList = new GetListOfThisWeeksStudySessionsTask(StudySpotDb.getDatabase(mContext)).execute().get();
+
+            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext, sessionList);
 
         } catch (InterruptedException i) {
             i.printStackTrace();
@@ -99,6 +105,7 @@ public class sendHoursUtils {
         long weeklyTotal;
         long hoursRemaining;
         boolean hadEnoughHours = true;
+        List<StudySession> sessionList;
 
         try {
             String totalHoursCompleted;
@@ -131,7 +138,9 @@ public class sendHoursUtils {
 
             Context mContext = mView.getContext();
 
-            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext);
+            sessionList = new GetListOfThisWeeksStudySessionsTask(StudySpotDb.getDatabase(mContext)).execute().get();
+
+            new pdfUtils().write(fileName, totalHoursRemaining, totalHoursCompleted, hadEnoughHours, mContext, sessionList);
 
         } catch (InterruptedException i) {
             i.printStackTrace();

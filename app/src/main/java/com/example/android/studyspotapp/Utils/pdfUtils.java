@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
+import com.example.android.studyspotapp.Database.StudySession;
 import com.example.android.studyspotapp.MainActivity;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -14,6 +15,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.List;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
@@ -26,6 +28,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class pdfUtils {
@@ -36,7 +40,7 @@ public class pdfUtils {
     boolean mExternalStorageWriteable = false;
     String state = Environment.getExternalStorageState();
 
-    public void write(String fname, String totalHoursRemaining, String totalHoursCompleted, Boolean hadEnoughHours, Context mContext) {
+    public void write(String fname, String totalHoursRemaining, String totalHoursCompleted, Boolean hadEnoughHours, Context mContext, java.util.List<StudySession> sessionList) {
 
         //Check if the permissions
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -73,12 +77,12 @@ public class pdfUtils {
                 PdfWriter writer = PdfWriter.getInstance(document, output);
 
                 //Encrypted PDF with a password the coaches will have. Password right now if for testing
-//                writer.setEncryption("password1".getBytes(), "password2".getBytes(), PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_40);
-//                writer.createXmpMetadata();
+                writer.setEncryption("password1".getBytes(), "password2".getBytes(), PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_40);
+                writer.createXmpMetadata();
 
                 document.open();
 
-                addLogo(document, mContext);
+                //addLogo(document, mContext);
 
                 //Customise the text of the pdf
                 float headingFontSize = 18f;
@@ -87,23 +91,23 @@ public class pdfUtils {
 
                 // Adds title
                 Paragraph title = new Paragraph(new Phrase(lineSpacing,"StudySpot Weekly Report",
-                        FontFactory.getFont(FontFactory.TIMES_BOLD, headingFontSize)));
+                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, headingFontSize)));
                 title.setAlignment(Element.ALIGN_CENTER);
                 title.setPaddingTop(30f);
                 document.add(title);
 
                 // Adds subsection
-                Paragraph totalHoursRecorded = new Paragraph(new Phrase(lineSpacing,"Total Hours Recorded: " + totalHoursCompleted,
-                        FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                Paragraph totalHoursRecorded = new Paragraph(new Phrase(lineSpacing,"\n" + "Total Hours Recorded: " + totalHoursCompleted,
+                        FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                 document.add(totalHoursRecorded);
 
                 if (hadEnoughHours == true) {
                     Paragraph HoursRemaining = new Paragraph(new Phrase(lineSpacing,"Extra Hours Completed: " + totalHoursRemaining,
-                            FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                            FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                     document.add(HoursRemaining);
                 } else {
                     Paragraph HoursRemaining = new Paragraph(new Phrase(lineSpacing,"Hours Remaining: " + totalHoursRemaining,
-                            FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                            FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                     document.add(HoursRemaining);
                 }
 
@@ -117,8 +121,20 @@ public class pdfUtils {
                 }
 
                 Paragraph completedStudyHall = new Paragraph(new Phrase(lineSpacing,"Completed Study Hall for this week: " + enoughHours,
-                        FontFactory.getFont(FontFactory.TIMES, subsectionFontSize)));
+                        FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
                 document.add(completedStudyHall);
+
+                // Adds Weekly session title
+                Paragraph weeklySessionTitle = new Paragraph(new Phrase(lineSpacing,"\n" + "This weeks recorded sessions:",
+                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, subsectionFontSize)));
+                document.add(weeklySessionTitle);
+
+                String sessionListString = convertSessionList(sessionList);
+
+                Paragraph sessionListP = new Paragraph(new Phrase(lineSpacing, "\n" + sessionListString,
+                        FontFactory.getFont(FontFactory.HELVETICA, subsectionFontSize)));
+
+                document.add(sessionListP);
 
                 // close document
                 document.close();
@@ -168,6 +184,26 @@ public class pdfUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+
+    public String convertSessionList(java.util.List<StudySession> studySessionList) {
+
+        java.util.List<String> studySessionStringArray = new ArrayList<>(studySessionList.size());
+
+        for (StudySession session : studySessionList) {
+            studySessionStringArray.add(session.toString());
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (String s : studySessionStringArray)
+        {
+            sb.append(s);
+            sb.append("\n\n");
+        }
+
+        return sb.toString();
 
     }
 }

@@ -50,12 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         StudySession studySession = studySessionList.get(position);
 
-        Date date = new Date((studySession.getDateAndTime()));
-        DateFormat format = new SimpleDateFormat("EEE, MMM d yyyy");
-        format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-        String formattedDate = format.format(date);
-
-        holder.titleTextView.setText(formattedDate);
+        holder.titleTextView.setText(studySession.getStudySessionDateDisplay(studySession.getDateAndTime()));
 
         //String sessionLength = Double.toString();
         holder.sessionLengthTextView.setText("Session Length: " + studySession.getStudySessionDisplay(studySession.getSessionLength()));
