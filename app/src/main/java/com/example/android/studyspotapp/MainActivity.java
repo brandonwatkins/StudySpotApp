@@ -293,10 +293,10 @@ public class MainActivity extends AppCompatActivity
         //Get reference to the apps database
         database = StudySpotDb.getDatabase(this);
 
-        StudySession s = new StudySession(System.currentTimeMillis());
+        /*StudySession s = new StudySession(System.currentTimeMillis());
         s.setSessionLength(10800000);
         Log.d(TAG, "Create NEW StudySession");
-        new StartStudySessionTask(database).execute(s);
+        new StartStudySessionTask(database).execute(s);*/
 
 
         // TODO set base to total session length for all sessions this week
@@ -1109,9 +1109,9 @@ public class MainActivity extends AppCompatActivity
             updateGeofencesAdded(!getGeofencesAdded());
             drawGeofence();
 
-            int messageId = getGeofencesAdded() ? R.string.geofences_added :
+            /*int messageId = getGeofencesAdded() ? R.string.geofences_added :
                     R.string.geofences_removed;
-            Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show();*/
         } else {
             // Get the status code for the error and log it using a user-friendly message.
             String errorMessage = GeofenceErrorMessages.getErrorString(this, task.getException());
